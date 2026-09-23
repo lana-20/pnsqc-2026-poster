@@ -11,27 +11,20 @@ Four of the five optimizations I measured made things worse or cheated.
 
 The one that won isn't an optimization at all.
 
-I'm presenting a poster paper at **PNSQC 2026** in Portland, Oct 12–14 👩‍🔬
+I'm presenting a poster at **PNSQC 2026** — Portland, Oct 12–14 👩‍🔬
 
 **Skip the Wrapper: Making a Browser-Automation CLI Faster**
 
-1,050 timed journeys across two real sites. Five candidate optimizations, measured under rules that stop a change looking faster by quietly doing less.
+1,050 timed journeys against the **Vibium** CLI. The persistent process — the obvious win — came in **740ms slower**.
 
-🐌 The persistent process — the obvious win — came in **740ms slower**
-🚨 Faking clicks in JavaScript was quicker, and still isn't an optimization: it stops checking elements are actionable. Time bought by doing less.
-⏳ "Just wait for the page to settle" → nothing measurable, at any size
+The survivor? `vibium` on your PATH isn't Vibium. It's a 41-line Node script that spawns the real binary, so every call pays a runtime boot first. **~108ms, every time.**
 
-The survivor? The command on your PATH isn't the tool. It's a 41-line Node script that spawns the real binary — so every single call pays a runtime boot before any browser work begins. **~108ms, every time.**
+A packaging bug, not a code bug. Filed upstream. **Merged.**
 
-The fix belonged in packaging, not in the code. Filed upstream. **Merged.**
-
-Come argue with me at the poster session. I'll bring the numbers, the noise floor, and the four techniques that lost — published, so nobody has to retry them.
-
-📍 Scan the QR to register, or grab the board and handout here:
+Scan to register, or take the board and the losing four:
 🔗 lana-20.github.io/pnsqc-2026-poster
 
-#PNSQC #PNSQC2026 #SoftwareTesting #TestAutomation #QA #PerformanceTesting #BrowserAutomation #SDET
-
+#PNSQC2026 #TestAutomation #QA #BrowserAutomation #SDET
 ---
 
 ## Alternate opener
