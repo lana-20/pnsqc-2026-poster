@@ -1,7 +1,10 @@
 # PNSQC 2026 — *Skip the Wrapper: Making a Browser-Automation CLI Faster*
 
+**Live → [lana-20.github.io/pnsqc-2026-poster](https://lana-20.github.io/pnsqc-2026-poster/)** · [Poster board (A0)](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/poster-board.html)
+· [Handout (2 Letter)](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/handout.html)
+
 Poster paper for the [Pacific NW Software Quality Conference](https://pnsqc.org/conference/2026/poster/),
-Portland, October 12–13 2026. Everything needed to rebuild the board, the handout and the
+Portland, October 12–14 2026 (technical conference 12–13, workshops the 14th). Everything needed to rebuild the board, the handout and the
 submission is here, and every figure on them is checked against its source before either
 artifact will build.
 
@@ -41,8 +44,8 @@ every client that made one. Four attach-and-leave cycles take one journey from 8
 |---|---|
 | [`pnsqc-poster/PNSQC-PROPOSAL.md`](pnsqc-poster/PNSQC-PROPOSAL.md) | the submission — title, 484-word abstract, bio |
 | [`pnsqc-poster/LEARNING-OBJECTIVES.md`](pnsqc-poster/LEARNING-OBJECTIVES.md) | what an attendee leaves able to do |
-| [`pnsqc-poster/assets/poster-board.html`](pnsqc-poster/assets/poster-board.html) | the board — A0 portrait, 1:1, print-ready |
-| [`pnsqc-poster/assets/handout.html`](pnsqc-poster/assets/handout.html) | the takeaway — 2 US Letter pages |
+| [**Poster board**](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/poster-board.html) — A0 portrait, 1:1, print-ready | rendered; source at [`pnsqc-poster/assets/poster-board.html`](pnsqc-poster/assets/poster-board.html) |
+| [**Handout**](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/handout.html) — 2 US Letter pages | rendered; source at [`pnsqc-poster/assets/handout.html`](pnsqc-poster/assets/handout.html) |
 | [`pnsqc-poster/findings.json`](pnsqc-poster/findings.json) | the evidence base every figure is drawn from |
 | [`pnsqc-poster/READINESS.md`](pnsqc-poster/READINESS.md) | the live checklist, including what is still open |
 | [`cli-v2/docs/TECHNIQUES.md`](cli-v2/docs/TECHNIQUES.md) | the verdict page the poster cites |
@@ -58,7 +61,9 @@ python3 pnsqc-poster/scripts/check_fit.py       # asserts both files fit their p
 ```
 
 Both builders are static — data and images are inlined as base64, so a print engine runs
-nothing before paginating. To print: open in Chrome → Print → Save as PDF; **board** at
+nothing before paginating. To print, open the
+[board](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/poster-board.html) or the
+[handout](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/handout.html) in Chrome → Print → Save as PDF; **board** at
 paper A0, margins None, background graphics on; **handout** at Letter, margins Default,
 background graphics on.
 

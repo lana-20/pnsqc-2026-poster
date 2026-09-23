@@ -11,9 +11,11 @@ and merged as [PR #432](https://github.com/VibiumDev/vibium/pull/432)**.
 
 Start at **`READINESS.md`** — it is the live checklist and says what is blocking.
 
-**Served over GitHub Pages** at
-[lana-20.github.io/pnsqc-2026-poster](https://lana-20.github.io/pnsqc-2026-poster/) —
-the board and handout render there as pages rather than as source. The four campaign data
+**Served over GitHub Pages.** The built artifacts render as pages rather than as source:
+
+* **Poster board**, A0 portrait 1:1 — <https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/poster-board.html>
+* **Handout**, 2 US Letter — <https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/handout.html>
+* Overview and verdict ledger — <https://lana-20.github.io/pnsqc-2026-poster/> The four campaign data
 files and the `cli-v2/docs` notes this subproject's pointers cite are vendored alongside it,
 so `verify_findings.py` passes standalone.
 

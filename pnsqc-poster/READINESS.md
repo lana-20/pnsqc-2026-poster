@@ -3,7 +3,7 @@
 Poster: *Skip the Wrapper: Making a Browser-Automation CLI Faster*
 Subproject: `pnsqc-poster/` (see its `README.md` for layout and build commands)
 Proposal: `pnsqc-poster/PNSQC-PROPOSAL.md` · Evidence: `pnsqc-poster/findings.json`
-Built: `assets/poster-board.html` (A0 1:1) · `assets/handout.html` (2 Letter)
+Built: [`assets/poster-board.html`](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/poster-board.html) (A0 1:1) · [`assets/handout.html`](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/handout.html) (2 Letter) — both served live
 Deadline: rolling, closes when spots fill or **Sept 22, 2026**. First draft to reviewer
 Sept 28.
 
