@@ -1,0 +1,326 @@
+{
+  "_readme": [
+    "Evidence base for the CLI-performance poster: what was measured, what shipped,",
+    "and what was filed upstream.",
+    "",
+    "Every figure here has a pointer a reader can open. `evidence` resolves in one",
+    "of three namespaces, checked by scripts/verify_findings.py:",
+    "",
+    "  path:line          a file in this repo (vibium-efficiency)",
+    "  repro:path:line    a file in the public reproduction repo",
+    "                     (~/vibium-wrapper-repro -> github.com/lana-20/vibium-cli-startup-repro)",
+    "  commit <sha>       a commit in this repo",
+    "",
+    "Nothing is included on recollection. The verdicts are quoted from the single",
+    "verdict page (cli-v2/docs/TECHNIQUES.md), which verify_docs.py recomputes",
+    "from cli-v2/data/ on every push -- the poster does not restate a measurement",
+    "that the checker cannot see."
+  ],
+  "study": {
+    "aut_flat": "automation-exercise.daisyladybug.com",
+    "aut_navheavy": "saucedemo.com",
+    "commands_flat": 6,
+    "commands_navheavy": 7,
+    "vibium_version": "26.5.31",
+    "journeys": {
+      "total": 1050,
+      "verified": 1050,
+      "what": "timed journeys in the measurement campaign proper -- the two factorial runs and the two transport runs, on v26.5.31, across both AUTs",
+      "distinct_from_patch_reps": "NOT the same quantity as patch.verified_reps. Those 710 are a later, separate verification of the shipped patch, run on the reproduction repo's own harness. The two must never be added: they measure different things on different harnesses.",
+      "sources": [
+        "cli-v2/data/campaign_flat.json",
+        "cli-v2/data/campaign_navheavy.json",
+        "cli-v2/data/04_transports_flat.json",
+        "cli-v2/data/04_transports_navheavy.json"
+      ],
+      "derivation": "sum of `correct` over every arm in the four files; `expected_correct` is stated per arm. Recomputed by verify_findings.py, never transcribed."
+    },
+    "accounting": [
+      "semantics held fixed -- an arm that changes what the journey does is not a faster arm",
+      "one-time setup reported apart from the journey total",
+      "readiness polling equalised across arms and recorded apart",
+      "absolute milliseconds lead; every ratio is stamped with its dispatch level",
+      "a noise floor measured from a control the change cannot have touched"
+    ],
+    "evidence": "cli-v2/docs/TECHNIQUES.md:8-18"
+  },
+  "verdicts": [
+    {
+      "id": "T1",
+      "technique": "Call the native binary, not the `vibium` shim",
+      "verdict": "SHIP IT",
+      "rank": 1,
+      "flat_ms": 405,
+      "flat_err": 28,
+      "flat_ratio": 1.33,
+      "navheavy_ms": 691,
+      "navheavy_err": 26,
+      "navheavy_ratio": 1.69,
+      "semantics": "unchanged",
+      "basis": "k=5 x n=15 x 2 profiles, 600/600 correct; per-command tax re-derived 5 independent ways",
+      "evidence": "cli-v2/docs/TECHNIQUES.md:23"
+    },
+    {
+      "id": "T3",
+      "technique": "Direct-attach BiDi socket",
+      "verdict": "worth it in a narrow case",
+      "rank": 2,
+      "flat_ms": 80,
+      "flat_err": 45,
+      "flat_ratio": 1.09,
+      "navheavy_ms": 45,
+      "navheavy_err": 9,
+      "navheavy_ratio": 1.15,
+      "semantics": "JS dispatch only",
+      "basis": "k=5 x n=15 x 2 profiles, 225/225 correct each",
+      "evidence": "cli-v2/docs/TECHNIQUES.md:24"
+    },
+    {
+      "id": "T5",
+      "technique": "Flat post-navigate wait",
+      "verdict": "no effect — closed",
+      "rank": 3,
+      "flat_ms": 0,
+      "navheavy_ms": 0,
+      "semantics": "unchanged",
+      "basis": "640 interleaved reps, drift-checked; nothing measurable at any size",
+      "evidence": "cli-v2/docs/TECHNIQUES.md:27"
+    },
+    {
+      "id": "T4",
+      "technique": "JS-dispatch click/fill",
+      "verdict": "not an optimization",
+      "rank": 4,
+      "flat_ms": 250,
+      "navheavy_ms": 655,
+      "semantics": "degraded",
+      "basis": "faster only because it stops checking actionability — it buys time by doing less",
+      "evidence": "cli-v2/docs/TECHNIQUES.md:25"
+    },
+    {
+      "id": "T2",
+      "technique": "`vibium pipe` (one persistent process)",
+      "verdict": "LOSES",
+      "rank": 5,
+      "flat_ms": -740,
+      "flat_ratio": 0.57,
+      "navheavy_ms": -212,
+      "navheavy_ratio": 0.62,
+      "semantics": "matched",
+      "basis": "5 AUT-runs, all negative; the cost was traced to the subscribe tax, not the second browser",
+      "evidence": "cli-v2/docs/TECHNIQUES.md:26"
+    }
+  ],
+  "wrapper": {
+    "what": "`vibium` on PATH is not Vibium",
+    "detail": "It is a 41-line Node script (36 lines of code) that resolves a platform package and execFileSyncs the real native binary. Every `vibium <verb>` is therefore two process spawns, and the first is a Node runtime boot.",
+    "shim_ms": 118,
+    "direct_ms": 10,
+    "saving_ms": 108,
+    "arithmetic": "118 − 10 = 108",
+    "ratio": 11.6,
+    "node_boot_share_pct": 92,
+    "evidence": "cli-v2/docs/TECHNIQUES.md:37-45",
+    "journey_share_pct": [
+      25,
+      41
+    ],
+    "journey_share_note": "The wrapper tax as a share of the whole journey: 25% on flat, 41% on navheavy, from the real-dispatch arms of the two campaigns. A FIXED per-call cost does not grow its share with n -- the share is what it is at any command count -- so this is stated as a share, never as something that becomes dominant at n=100.",
+    "journey_share_sources": [
+      "cli-v2/data/campaign_flat.json",
+      "cli-v2/data/campaign_navheavy.json"
+    ]
+  },
+  "position_tax": {
+    "note": "Multiplying the per-call tax by a journey's command count overpredicts, because the tax is partly self-refunding on a hydrating page: the shim arm arrives at each post-navigate command ~107ms later, and a later-arriving call is a cheaper call.",
+    "overprediction": "6 × 106.19 = 637ms predicted against 405ms measured; the 232ms shortfall is 10.3× the campaign's own 22.6ms single-difference floor",
+    "rows": [
+      {
+        "position": "clean",
+        "gloss": "no preceding navigation",
+        "flat_ms": 106.2,
+        "navheavy_ms": 122.6,
+        "meaning": "full tax"
+      },
+      {
+        "position": "after_poll",
+        "gloss": "follows a navigating click already polled to readiness",
+        "flat_ms": null,
+        "navheavy_ms": 123.2,
+        "meaning": "full tax — the poll already spent the decay"
+      },
+      {
+        "position": "after_nav",
+        "gloss": "follows an unpolled navigation",
+        "flat_ms": 23.7,
+        "navheavy_ms": 67.3,
+        "meaning": "45–78% refunded"
+      }
+    ],
+    "falsifier": "Stated before running: if the delta is flat across groups, the refund story is wrong. It did not fire. `after_poll` is the discriminator — a post-navigate position that pays the FULL tax, which rules out 'post-navigate steps are simply different steps'.",
+    "evidence": "cli-v2/docs/TECHNIQUES.md:76-88"
+  },
+  "residual": {
+    "claim": "The page-independent residual is Chrome's BiDi mapper, not the page",
+    "detail": "Chrome's WebDriver BiDi is a JavaScript bundle running in its own renderer process, a target Chrome names `BiDi-CDP Mapper`. Probed causally over CDP — which does not queue behind BiDi's command handling — the mapper's own context costs 10.3ms at t=0 and 0.9ms at t=150ms after a navigation. The page context, as a control, is flat.",
+    "mapper_decay_ms": 9.4,
+    "mapper_ci": [
+      8.2,
+      13.8
+    ],
+    "control_decay_ms": -0.1,
+    "refund_by_page_weight": [
+      {
+        "aut": "automation-exercise",
+        "weight": "heavy JS",
+        "refund_ms": 82.5,
+        "refund_pct": 78
+      },
+      {
+        "aut": "saucedemo",
+        "weight": "lighter",
+        "refund_ms": 55.2,
+        "refund_pct": 45
+      },
+      {
+        "aut": "local static page",
+        "weight": "none",
+        "refund_ms": 19.2,
+        "refund_pct": 17
+      }
+    ],
+    "prediction_failed": "The refund had to reach zero on a page with nothing to hydrate. It did not — 19.2ms survives, bootstrap CI [+3.3, +22.6], excluding zero. So hydration explains roughly 77% of the effect, and the leftover was then located rather than named.",
+    "evidence": "cli-v2/docs/TECHNIQUES.md:160-176"
+  },
+  "patch": {
+    "name": "the wrapper-skipper",
+    "what": "Resolve `bin` to the platform binary at install time instead of at every invocation: hard-link the real binary over `bin/cli.js` in `postinstall.js`, the way esbuild already does.",
+    "guarded_off": [
+      "win32",
+      "yarn",
+      "binary not a file",
+      "any link/rename error"
+    ],
+    "declines_out_loud": "on every skip it prints `vibium: keeping the Node shim (<reason>)` rather than failing the install",
+    "kind": "packaging enhancement, not a bug — output is byte-identical either way",
+    "verified_reps": 710,
+    "verified_runs": 13,
+    "mismatches": 0,
+    "saving_range_ms": [
+      107.4,
+      111.9
+    ],
+    "ratio_range": [
+      11.33,
+      11.92
+    ],
+    "noise_floor_ms": 2.2,
+    "floor_multiple": "40×–60× the measured floor",
+    "evidence": "repro:patch/postinstall.diff:1"
+  },
+  "sweep": {
+    "note": "Re-measured fresh with the reproduction repo's own harness. Each sweep is also run in reverse, so a direction effect cannot hide in the result.",
+    "runs": [
+      {
+        "run": "n15_fwd",
+        "n": 15,
+        "saving_ms": 109.4,
+        "ratio": 11.63,
+        "floor_ms": 2.5
+      },
+      {
+        "run": "n50_fwd",
+        "n": 50,
+        "saving_ms": 108.5,
+        "ratio": 11.61,
+        "floor_ms": 2.2
+      },
+      {
+        "run": "n100_fwd",
+        "n": 100,
+        "saving_ms": 108.0,
+        "ratio": 11.44,
+        "floor_ms": 2.7
+      },
+      {
+        "run": "n15_rev",
+        "n": 15,
+        "saving_ms": 107.6,
+        "ratio": 11.33,
+        "floor_ms": 1.8
+      },
+      {
+        "run": "n50_rev",
+        "n": 50,
+        "saving_ms": 109.3,
+        "ratio": 11.73,
+        "floor_ms": 2.7
+      },
+      {
+        "run": "n100_rev",
+        "n": 100,
+        "saving_ms": 108.3,
+        "ratio": 11.59,
+        "floor_ms": 2.4
+      }
+    ],
+    "spread_saving_pct": 1.7,
+    "spread_ratio_pct": 3.5,
+    "evidence": "repro:README.md:163-172"
+  },
+  "upstream": {
+    "issue": 356,
+    "url": "https://github.com/VibiumDev/vibium/issues/356",
+    "title": "Enhancement: `vibium` CLI pays ~108ms of Node startup on every invocation",
+    "state": "closed — merged as PR #432",
+    "filed": "2026-08-15",
+    "words": 215,
+    "repro_repo": "github.com/lana-20/vibium-cli-startup-repro",
+    "invited_by": "a maintainer asked publicly for 'skip the wrapper' to be filed as an enhancement",
+    "register": "Filed as a few sentences in the register CONTRIBUTING.md asks for, with the patch offered in one line at the end rather than proposed as a section. Their guidance is explicit that an unprompted code PR tends to sit or be superseded by a fix written differently.",
+    "who_it_does_not_help": "MCP users get no benefit — `vibium mcp` is one long-lived process, so the cost is paid once at server start, never per tool call. Interactive human use gets no meaningful benefit either. Stated in the issue, because it is the fastest way for a maintainer to close it.",
+    "evidence": "pnsqc-poster/UPSTREAM-ISSUE-DRAFT.md:1-5",
+    "title_note": "Verbatim as filed, backticks included. `vibium` is the command on PATH, not the product -- lowercasing it is the poster's whole point, so it is never title-cased here. Checked against UPSTREAM-ISSUE-DRAFT.md:62.",
+    "closed": "2026-08-25",
+    "merged_pr": 432,
+    "merged_pr_url": "https://github.com/VibiumDev/vibium/pull/432",
+    "merged_pr_title": "Replace the npm bin shim with the platform binary at install time",
+    "merge_commit": "e65263ebe3670948d75dd0ee4ed9405c573a9911",
+    "outcome_note": "Closed as completed 2026-08-25, the same second PR #432 merged. The poster now claims a merged upstream fix rather than a filed report. The `who_it_does_not_help` scoping below stayed in the issue and is kept here: it was written to give a maintainer the fastest honest grounds to close the report, and it did not turn out to be the grounds they used.",
+    "state_verified": "gh api repos/VibiumDev/vibium/issues/356 and /pulls/432, 2026-09-22",
+    "state_short": "merged as #432",
+    "state_short_note": "Same fact as `state`, shortened for the handout, which is typeset to 2 Letter pages and has no slack. verify_findings.py asserts the two agree on issue outcome; they must never diverge in meaning."
+  },
+  "honesty": [
+    {
+      "id": "ratio_denominator",
+      "rule": "A ratio depends on its denominator; lead with the absolute difference",
+      "detail": "`vibium paths` is ~92% Node boot, so removing the boot gives ~11.6×. That is a real measurement of a near-empty command and NOT a real-world speedup. The journey figures — 1.33× and 1.69× — are what a reader may quote. The same underlying factor measured at two dispatch levels produced ratios differing by 1.85× on identical data.",
+      "evidence": "repro:README.md:21-42"
+    },
+    {
+      "id": "retracted_55_180",
+      "rule": "A figure true of a microbenchmark can be false of the system",
+      "detail": "[RETRACTED] `vibium pipe` previously measured 55–180× faster on a trivial command and that figure was published. Under a real journey the same technique LOSES — −740ms and −212ms. The microbenchmark figure is retired, and this project keeps the retraction enforced rather than merely recorded.",
+      "evidence": "cli-v2/docs/TECHNIQUES.md:26"
+    },
+    {
+      "id": "withdrawn_direction_effect",
+      "rule": "Publish the claims that failed to replicate, in place",
+      "detail": "An earlier sweep showed the reverse direction landing ~2.9ms above the forward one, and the README explained it as machine state. Re-measured fresh, that offset is −0.2ms: there is no direction effect. The claim is withdrawn and the prior runs are kept in `results/prior/` precisely so the withdrawal is visible.",
+      "evidence": "repro:README.md:179-186"
+    },
+    {
+      "id": "noise_floor_first",
+      "rule": "Measure run-to-run noise from a control the change cannot have touched",
+      "detail": "The harness times the SAME arm twice per rep. That is the difference a quiet machine produces when nothing happened — 2.2ms median. The saving is 40×–60× that floor. Without the floor, a 108ms difference is a number; with it, it is a result.",
+      "evidence": "repro:README.md:127-131"
+    },
+    {
+      "id": "prediction_before_run",
+      "rule": "Register the prediction and its falsifier before re-running",
+      "detail": "The refund mechanism was pushed to a prediction it could fail: on a page with nothing to hydrate, the refund must vanish. It did not vanish, and the poster reports that failure rather than the story it was meant to confirm.",
+      "evidence": "cli-v2/docs/TECHNIQUES.md:90-112"
+    }
+  ]
+}

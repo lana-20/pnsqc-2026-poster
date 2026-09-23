@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Handout — Skip the Wrapper — PNSQC 2026</title>
+<style>
+/* 0.45/0.5in keeps a printable margin on every consumer printer while buying
+   back the height and measure this sheet needs to hold two pages. Usable box:
+   7.5 x 10.1in = 720 x 970px at 96dpi, which scripts/check_fit.py asserts. */
+@page { size: letter; margin: 0.45in 0.5in; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+:root {
+  --navy:#11284B; --orange:#F8A171; --sand:#FDCF8B; --cream:#F9EFD1;
+  --ground:#FFFFFF; --sunk:#F4F3EE;
+  --ink:#1A1C1B; --ink2:#3C413B; --ink3:#6A706A; --rule:#DCDCD4;
+  --win:#2f7d8f; --loss:#d03b3b; --warn:#c2591c;
+  --sans: ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono: ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+body { background:var(--ground); color:var(--ink); font-family:var(--sans);
+        font-size:7.4pt; line-height:1.32;
+        -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+header { border-bottom:1.6pt solid var(--navy); padding-bottom:4pt; margin-bottom:5pt; }
+.super { font-family:var(--mono); font-size:6.2pt; letter-spacing:0.15em;
+          text-transform:uppercase; color:var(--orange); font-weight:700; }
+h1 { font-size:17pt; line-height:1.0; letter-spacing:-0.025em; font-weight:800;
+      color:var(--navy); margin:2.5pt 0 0; }
+.subtitle { margin-top:2.5pt; font-size:8.2pt; color:var(--ink2); font-weight:500; }
+.by { margin-top:2.5pt; font-size:7.8pt; color:var(--ink2); font-weight:600; }
+.by span { color:var(--ink3); font-weight:400; }
+
+h2 { font-family:var(--mono); font-size:8.8pt; font-weight:700; color:var(--navy);
+      margin:3.5pt 0 2pt; border-top:0.6pt solid var(--rule); padding-top:3pt; }
+h2 .rn { color:var(--orange); margin-right:4pt; }
+h2 .ct { font-family:var(--sans); font-weight:600; font-size:8pt; color:var(--ink2); }
+h2:first-of-type { border-top:0; padding-top:0; }
+h4 { font-size:7.9pt; font-weight:750; color:var(--navy); margin:0 0 2pt; }
+p { margin:0 0 3pt; }
+code { font-family:var(--mono); font-size:0.92em; }
+.lab { font-weight:750; color:var(--navy); }
+.two { display:grid; grid-template-columns:1fr 1fr; gap:12pt; }
+.honcols { columns:3; column-gap:12pt; }
+.honcols .hon { break-inside:avoid; }
+.honcols ul { margin:1pt 0 0; }
+.honcols ul li { font-size:6.5pt; line-height:1.24; margin-bottom:1pt; color:var(--ink2); }
+.small { font-size:7pt; color:var(--ink3); line-height:1.28; }
+
+table { border-collapse:collapse; width:100%; margin-bottom:2.5pt; }
+td, th { padding:2pt 4pt; vertical-align:top; border-bottom:0.5pt solid var(--rule);
+          text-align:left; }
+thead th { font-family:var(--mono); font-size:6pt; letter-spacing:0.06em;
+            text-transform:uppercase; color:var(--ink3); background:var(--sunk); }
+td.n, th.n { text-align:right; font-family:var(--mono); font-variant-numeric:tabular-nums;
+              white-space:nowrap; }
+tbody tr:last-child td { border-bottom:0; }
+td.tid { font-family:var(--mono); font-size:8.6pt; font-weight:700; color:var(--c);
+          border-left:2.5pt solid var(--c); width:20pt; }
+.vv { font-family:var(--mono); font-size:6.6pt; font-weight:700; color:var(--c); margin-top:1pt; }
+.det { color:var(--ink3); font-size:6.7pt; line-height:1.24; margin-top:1pt; font-weight:400; }
+td.ev, .ev { font-family:var(--mono); font-size:6pt; color:var(--ink3); line-height:1.22; }
+td.ev { width:140pt; }
+
+pre { margin:0; background:#0F1B2E; color:#E8EDF4; border-radius:2pt;
+       padding:3.5pt 4.5pt; font-family:var(--mono); font-size:5.6pt; line-height:1.3;
+       overflow:hidden; }
+pre .add { display:block; color:#9BE5A8; white-space:pre; }
+.difffile { font-family:var(--mono); font-size:6.2pt; color:var(--ink3); margin-bottom:2pt; }
+
+.card { border:0.6pt solid var(--rule); border-top:2.5pt solid var(--navy);
+         padding:4pt 5pt; margin-bottom:4pt; break-inside:avoid; }
+.card.win { border-top-color:var(--win); }
+.card.warn { border-top-color:var(--warn); }
+.sub { background:var(--cream); border:0.5pt solid var(--sand); padding:4pt 5pt;
+        break-inside:avoid; margin-bottom:3pt; }
+.filed { display:flex; gap:6pt; align-items:baseline; background:var(--sunk);
+          border-left:2.5pt solid var(--win); padding:3pt 5pt; break-inside:avoid;
+          margin-top:2.5pt; }
+.filed .num { font-family:var(--mono); font-size:9.5pt; font-weight:700; color:var(--win); }
+
+.hon { border-left:2pt solid var(--orange); padding-left:5pt; margin-bottom:2.5pt;
+        break-inside:avoid; }
+.hon b { font-size:7.2pt; color:var(--navy); }
+.hon p { font-size:6.5pt; line-height:1.24; color:var(--ink2); margin:0.5pt 0 0; }
+
+ul { margin:0; padding-left:10pt; }
+ul li { margin-bottom:1.4pt; line-height:1.26; }
+ol { margin:0; padding-left:12pt; columns:3; column-gap:12pt; }
+ol li { margin-bottom:1.8pt; line-height:1.26; break-inside:avoid; }
+ol li b { color:var(--navy); }
+.rule { font-size:11pt; line-height:1.14; font-weight:800; color:var(--navy);
+         letter-spacing:-0.02em; margin:0 0 3.5pt; }
+
+footer { border-top:0.6pt solid var(--rule); margin-top:5pt; padding-top:3.5pt;
+          font-family:var(--mono); font-size:6.6pt; color:var(--ink3); line-height:1.48; }
+footer b { color:var(--navy); }
+.pb { break-before:page; }
+</style></head>
+<body>
+
+<header>
+  <div class="super">Making a Browser-Automation CLI Faster</div>
+  <h1>Skip the Wrapper</h1>
+  <div class="subtitle">Five optimizations measured under fixed semantics. One ships, and it is a packaging change.</div>
+  <div class="by">Lana Begunova <span>· Daisy Lady Bug · Seattle, WA · PNSQC 2026 · October 12–14, 2026 · Portland, Oregon</span></div>
+</header>
+
+<h2>Abstract</h2>
+<div class="two">
+  <p>An agent driving a browser through a CLI issues hundreds of sequential commands, so per-call overhead — not per-call work — sets the pace. This study measured five candidate optimizations for one such CLI (Vibium, OSS) across two real journeys under fixed semantics.</p>
+  <p><b>Four did not survive.</b> One persistent-process technique <b>lost</b> outright. One was faster only because it stopped checking that elements were actionable — time bought by doing less. One vanished under measurement. The winner turned out not to be an optimization at all but a <b>packaging defect</b>: the command on your PATH is a 41-line Node script that spawns the real binary, so every invocation pays a Node runtime boot first.</p>
+</div>
+<p class="small"><b>In five numbers:</b>
+5 techniques measured under fixed semantics ·
+1 shipped ·
+~108ms saved per CLI call (118 − 10 = 108) ·
+691ms off a real 7-command journey ·
+710 reps with 0 output mismatches.
+Filed upstream as issue #356.</p>
+
+<h2><span class="rn">I.</span>Introduction</h2>
+<div class="two">
+  <p><span class="lab">Motivation.</span> Agent-driven test automation inverts the usual cost model. A human runs one command and waits; an agent runs a hundred, and the fixed cost of each one dominates. That makes per-invocation overhead a first-class performance property of a CLI — and it is the property nobody profiles, because on a single interactive command it is invisible. The question here is narrow and practical: for one widely used browser-automation CLI, where does the time actually go, and which of the obvious fixes survives contact with a real journey?</p>
+  <p><span class="lab">Problem Definition.</span> The trap is that almost any change makes a benchmark faster if you let the benchmark change too. Skip an actionability check and clicks get quicker; hold a browser open and startup leaves the total. Neither is a faster tool. So every arm here holds <b>semantics fixed</b>, reports one-time setup <b>apart</b> from the journey, <b>equalises</b> readiness polling, and is compared against a <b>noise floor measured from a control the change cannot have touched</b>. Under those rules, most of the candidates stopped looking like wins.</p>
+</div>
+
+<h2><span class="rn">II.</span>Approach <span class="ct">· A. Review — the five candidates</span></h2>
+<p>Five techniques, two AUTs, semantics fixed. Absolute milliseconds lead: the same underlying factor measured at two dispatch levels produced ratios differing by 1.85× on identical data, so a ratio without its level is not a result.</p>
+<table>
+  <thead><tr><th></th><th>technique · verdict · basis</th>
+  <th class="n">flat<br>6 cmd</th><th class="n">navheavy<br>7 cmd</th><th>evidence</th></tr></thead>
+  <tbody><tr><td class="tid" style="--c:#2f7d8f">T1</td><td><b>Call the native binary, not the vibium shim</b><div class="vv" style="--c:#2f7d8f">SHIP IT · semantics unchanged</div><div class="det">k=5 x n=15 x 2 profiles, 600/600 correct</div></td><td class="n">+405ms<br>1.33×</td><td class="n">+691ms<br>1.69×</td><td class="ev"><code>cli-v2/docs/TECHNIQUES.md:23</code></td></tr>
+<tr><td class="tid" style="--c:#4a7c59">T3</td><td><b>Direct-attach BiDi socket</b><div class="vv" style="--c:#4a7c59">worth it in a narrow case · semantics JS dispatch only</div><div class="det">k=5 x n=15 x 2 profiles, 225/225 correct each</div></td><td class="n">+80ms<br>1.09×</td><td class="n">+45ms<br>1.15×</td><td class="ev"><code>cli-v2/docs/TECHNIQUES.md:24</code></td></tr>
+<tr><td class="tid" style="--c:#8b8f88">T5</td><td><b>Flat post-navigate wait</b><div class="vv" style="--c:#8b8f88">no effect — closed · semantics unchanged</div><div class="det">640 interleaved reps, drift-checked</div></td><td class="n">none</td><td class="n">none</td><td class="ev"><code>cli-v2/docs/TECHNIQUES.md:27</code></td></tr>
+<tr><td class="tid" style="--c:#c2591c">T4</td><td><b>JS-dispatch click/fill</b><div class="vv" style="--c:#c2591c">not an optimization · semantics degraded</div><div class="det">faster only because it stops checking actionability — it buys time by doing less</div></td><td class="n">+250ms</td><td class="n">+655ms</td><td class="ev"><code>cli-v2/docs/TECHNIQUES.md:25</code></td></tr>
+<tr><td class="tid" style="--c:#d03b3b">T2</td><td><b>vibium pipe (one persistent process)</b><div class="vv" style="--c:#d03b3b">LOSES · semantics matched</div><div class="det">5 AUT-runs, all negative</div></td><td class="n">-740ms<br>0.57×</td><td class="n">-212ms<br>0.62×</td><td class="ev"><code>cli-v2/docs/TECHNIQUES.md:26</code></td></tr></tbody>
+</table>
+<p class="small">Only <b>T1</b> is free. It changes nothing about what the tool does — same verbs, same arguments, same actionability-checked <code>click</code> and <code>fill</code>, byte-identical output — because it is not a change to the tool at all. It is a change to how the tool is installed.</p>
+<div class="filed">
+  <span class="num">#356</span>
+  <p><b>Filed 2026-08-15</b> — “Enhancement: <code>vibium</code> CLI pays ~108ms of Node startup on every invocation”, currently
+  merged as #432. 
+  <b>Who it does not help:</b> MCP users get no benefit — <code>vibium mcp</code> is one long-lived process, so the cost is paid once at server start, never per tool call. Interactive human use gets no meaningful benefit either. Stated in the issue, because it is the fastest way for a maintainer to close it.<br>
+  <span class="ev">https://github.com/VibiumDev/vibium/issues/356 · repro github.com/lana-20/vibium-cli-startup-repro</span></p>
+</div>
+
+
+<h2><span class="rn">II.</span>Approach <span class="ct">· B. Experiment — where the time goes</span></h2>
+<div class="two">
+  <div>
+    <p>The <b>wrapper</b> is the whole finding. <code>vibium</code> on <code>PATH</code> is not Vibium: it is a Node script that resolves a platform package and <code>execFileSync</code>s the real native binary. Every <code>vibium &lt;verb&gt;</code> is two process spawns, and the first is a Node runtime boot — paid before any browser work begins.</p>
+    <p>On a near-empty command the shim costs ~118ms against ~10ms calling the platform binary directly. The gap is constant whatever the command does, which is what a runtime boot looks like and not what work looks like.</p>
+  </div>
+  <div>
+    <p>That per-call figure does <b>not</b> multiply into a journey total. On the flat profile 6 × 106.19ms predicts 637ms against 405ms measured, and the 232ms shortfall is 10.3× the campaign's own 22.6ms single-difference floor. The tax is <b>partly self-refunding</b>: the shim arm arrives at each post-navigate command ~107ms later, and a later-arriving call is a cheaper call.</p>
+    <p class="small">Stated before running: if the delta is flat across groups, the refund story is wrong. It did not fire. <code>after_poll</code> is the discriminator — a post-navigate position that pays the FULL tax, which rules out 'post-navigate steps are simply different steps'.</p>
+  </div>
+</div>
+<p class="small"><b>By position</b> (board, Figure 2): <code>clean</code> 106.2ms / 122.6ms (full tax) · <code>after_poll</code> — / 123.2ms (full tax — the poll already spent the decay) · <code>after_nav</code> 23.7ms / 67.3ms (45–78% refunded).</p>
+
+<div class="pb"></div>
+<h2><span class="rn">II.</span>Approach <span class="ct">· C. Results</span></h2>
+<div class="two">
+  <div>
+    <h4>The refund shrinks with page weight — but not to zero</h4>
+    <p class="small">A falsifier registered before running required the refund to vanish on a
+      page with nothing to hydrate. It shrank monotonically, then <b>stopped at
+      19.2ms</b> — excluding zero. Hydration
+      explains ~77%, not all.</p>
+    <table>
+      <thead><tr><th>AUT</th><th>page weight</th><th class="n">refund</th><th class="n">of tax</th></tr></thead>
+      <tbody><tr><td>automation-exercise</td><td>heavy JS</td><td class="n"><b>82.5ms</b></td><td class="n">78%</td></tr>
+<tr><td>saucedemo</td><td>lighter</td><td class="n"><b>55.2ms</b></td><td class="n">45%</td></tr>
+<tr><td>local static page</td><td>none</td><td class="n"><b>19.2ms</b></td><td class="n">17%</td></tr></tbody>
+    </table>
+    <h4 style="margin-top:5pt">The residual is Chrome's BiDi mapper, not the page</h4>
+    <p class="small">Chrome's WebDriver BiDi is a JS bundle in its own renderer, a target named
+      <code>BiDi-CDP Mapper</code>. Probed over CDP, its context decays
+      <b>9.4ms</b> (95% CI [8.2,
+      13.8]) in the 150ms after a navigation; the page-context control
+      -0.1ms. <code>cli-v2/docs/TECHNIQUES.md:160-176</code></p>
+    <p class="small"><b>13 runs, 710 reps, 0 mismatches</b>, saving 107.4–111.9ms per call at 40×–60× the measured noise floor. Every sweep was also run in reverse, so a direction effect could not hide in the result.</p>
+    <table>
+      <thead><tr><th>run</th><th class="n">n</th><th class="n">saving</th><th class="n">ratio</th><th class="n">floor</th></tr></thead>
+      <tbody><tr><td><code>n15_fwd</code></td><td class="n">15</td><td class="n"><b>109.4ms</b></td><td class="n">11.63×</td><td class="n">2.5ms</td></tr>
+<tr><td><code>n50_fwd</code></td><td class="n">50</td><td class="n"><b>108.5ms</b></td><td class="n">11.61×</td><td class="n">2.2ms</td></tr>
+<tr><td><code>n100_fwd</code></td><td class="n">100</td><td class="n"><b>108.0ms</b></td><td class="n">11.44×</td><td class="n">2.7ms</td></tr></tbody>
+    </table>
+    <p class="small">Spread 1.7% on the saving,
+      3.5% on the ratio. The 3 reverse-order runs land at 107.6–109.3ms, so there is no direction effect to explain.
+      <code>repro:README.md:163-172</code></p>
+  </div>
+  <div>
+    <div class="card win">
+      <h4>The wrapper-skipper — packaging enhancement, not a bug — output is byte-identical either way</h4>
+      <p>The fix is not in the CLI. Resolve <code>bin</code> to the platform binary <b>at install time</b> — hard-link the real binary over the shim in <code>postinstall.js</code>, which is what esbuild already does — and the per-invocation boot disappears. It declines out loud rather than failing: on Windows, under Yarn, or on any link error it prints <code>vibium: keeping the Node shim (&lt;reason&gt;)</code> and leaves a working install alone.</p>
+    </div>
+    <div class="difffile">— packages/vibium/postinstall.js — abridged; filed patch at repro:patch/postinstall.diff</div>
+    <pre><span class="add">+function maybeReplaceShimWithBinary(vibiumPath) {</span>
+<span class="add">+  if (os.platform() === 'win32') return 'skipped: win32';</span>
+<span class="add">+  if (isYarn())                 return 'skipped: yarn';</span>
+<span class="add">+  const shim = path.join(__dirname, 'bin', 'cli.js');</span>
+<span class="add">+  const tmp  = `${shim}.${process.pid}.tmp`;</span>
+<span class="add">+  try   { fs.linkSync(vibiumPath, tmp);</span>
+<span class="add">+          fs.renameSync(tmp, shim);   // atomic swap, keeps the shim on failure</span>
+<span class="add">+          return 'linked'; } catch { /* clean up tmp */ }</span>
+<span class="add">+}</span></pre>
+    <p class="small" style="margin-top:2.5pt">Link then rename, so a failure never leaves a half-written entry point. Every skip path keeps the working shim.
+      Guarded off on <code>win32</code> · <code>yarn</code> · <code>binary not a file</code> · <code>any link/rename error</code>; on every skip it prints <code>vibium: keeping the Node shim (&lt;reason&gt;)</code> rather than failing the install.</p>
+  </div>
+</div>
+
+<h2>How the numbers were kept honest</h2>
+<div class="honcols">
+  <div class="hon"><b>Accounting rules, applied to every arm</b>
+    <ul><li>semantics held fixed -- an arm that changes what the journey does is not a faster arm</li>
+<li>one-time setup reported apart from the journey total</li>
+<li>readiness polling equalised across arms and recorded apart</li>
+<li>absolute milliseconds lead; every ratio is stamped with its dispatch level</li>
+<li>a noise floor measured from a control the change cannot have touched</li></ul>
+    <p><code class="ev">cli-v2/docs/TECHNIQUES.md:8-18</code> — AUTs
+      automation-exercise.daisyladybug.com (6 cmd) and
+      saucedemo.com (7 cmd),
+      Vibium 26.5.31.</p>
+  </div>
+  <div class="hon"><b>A ratio depends on its denominator; lead with the absolute difference</b><p>~11.6× is a true measurement of a near-empty command. The journey figures are 1.33× and 1.69×. <code class="ev">repro:README.md:21-42</code></p></div>
+<div class="hon"><b>A figure true of a microbenchmark can be false of the system</b><p>[RETRACTED] The persistent-process arm previously measured 55–180× on a trivial command; on a real journey it LOSES. <code class="ev">cli-v2/docs/TECHNIQUES.md:26</code></p></div>
+<div class="hon"><b>Publish the claims that failed to replicate, in place</b><p>A published ~2.9ms direction effect re-measured at −0.2ms and is withdrawn, in place. <code class="ev">repro:README.md:179-186</code></p></div>
+<div class="hon"><b>Measure run-to-run noise from a control the change cannot have touched</b><p>The floor is the same arm timed twice per rep — 2.2ms on the patch sweep, 22.6ms on the campaign. The saving is 40×–60× the sweep's. <code class="ev">repro:README.md:127-131</code></p></div>
+<div class="hon"><b>Register the prediction and its falsifier before re-running</b><p>The refund's falsifier was registered first. It fired at 19.2ms, and that located the residual. <code class="ev">cli-v2/docs/TECHNIQUES.md:90-112</code></p></div>
+</div>
+
+<h2><span class="rn">III.</span>Conclusion</h2>
+<p class="rule">The cheapest performance win is often not in the code. It is in the packaging.</p>
+<ol><li><b>Profile the invocation, not just the operation.</b></li>
+<li><b>Hold semantics fixed or you are not measuring speed.</b></li>
+<li><b>Measure a noise floor from a control the change cannot have touched.</b></li>
+<li><b>Lead with the absolute difference.</b></li>
+<li><b>Register the falsifier before you re-run.</b></li>
+<li><b>Report the technique that lost, and why.</b></li></ol>
+<p class="small" style="margin-top:3pt">Filed upstream, at a maintainer's public invitation, as an enhancement in the register the project's own CONTRIBUTING.md asks for — symptom first, patch offered in one line at the end, and an explicit statement of who it does <b>not</b> help: MCP users get no benefit, because that is one long-lived process, and nobody notices 108ms on a single interactive command. It is scripted and agent-driven CLI use where it adds up.</p>
+
+<footer>
+  Full write-up: <b>daisyladybug.com/blog/making-vibium-cli-faster/</b><br>
+  Public reproduction — <code>python3 measure.py 50 mine</code>, under a minute, does not
+  touch your install: <b>github.com/lana-20/vibium-cli-startup-repro</b><br>
+  Lana Begunova · Daisy Lady Bug · Seattle, WA · PNSQC 2026 · October 12–14, 2026 · Portland, Oregon
+</footer>
+
+</body></html>

@@ -1,0 +1,125 @@
+{
+  "profile": "flat",
+  "k_repeats": 5,
+  "n_per_arm": 15,
+  "per_repeat": [
+    {
+      "native_js": 1024.7864723205566,
+      "pipe": 1733.691930770874,
+      "direct_attach": 891.8404579162598
+    },
+    {
+      "native_js": 974.869966506958,
+      "pipe": 1718.1527614593506,
+      "direct_attach": 868.1793212890625
+    },
+    {
+      "native_js": 958.1573009490967,
+      "pipe": 1693.4280395507812,
+      "direct_attach": 914.3412113189697
+    },
+    {
+      "native_js": 950.7455825805664,
+      "pipe": 1793.3993339538574,
+      "direct_attach": 926.9154071807861
+    },
+    {
+      "native_js": 997.1857070922852,
+      "pipe": 1666.144609451294,
+      "direct_attach": 904.2887687683105
+    }
+  ],
+  "per_journey": {
+    "native_js": {
+      "n": 5,
+      "median": 974.869966506958,
+      "mean": 981.1490058898926,
+      "stdev": 30.22340666819879,
+      "min": 950.7455825805664,
+      "max": 1024.7864723205566
+    },
+    "pipe": {
+      "n": 5,
+      "median": 1718.1527614593506,
+      "mean": 1720.9633350372314,
+      "stdev": 47.906616413155994,
+      "min": 1666.144609451294,
+      "max": 1793.3993339538574
+    },
+    "direct_attach": {
+      "n": 5,
+      "median": 904.2887687683105,
+      "mean": 901.1130332946777,
+      "stdev": 22.48022758123585,
+      "min": 868.1793212890625,
+      "max": 926.9154071807861
+    }
+  },
+  "setup_ms": {
+    "native_js": 998.0700016021729,
+    "pipe": 988.5064601898193,
+    "direct_attach": 1000.4495143890381
+  },
+  "onetime_samples": {
+    "pipe": [
+      943.4430599212646,
+      995.2833652496338,
+      999.1459846496582,
+      1013.6430263519287,
+      991.0168647766113
+    ],
+    "direct_attach": [
+      2.9282569885253906,
+      2.2580623626708984,
+      2.6569366455078125,
+      2.3040771484375,
+      1.7502307891845703
+    ]
+  },
+  "true_total_ms": {
+    "native_js": 1979.2190074920654,
+    "pipe": 2709.469795227051,
+    "direct_attach": 1901.5625476837158
+  },
+  "correct": {
+    "native_js": 75,
+    "pipe": 75,
+    "direct_attach": 75
+  },
+  "expected_correct": {
+    "native_js": 75,
+    "pipe": 75,
+    "direct_attach": 75
+  },
+  "effects_vs_native_js": {
+    "pipe": {
+      "delta_ms": -739.8143291473389,
+      "ratio": 0.5701161587319153,
+      "sigma": 32.765031281822694,
+      "verdict": "REAL"
+    },
+    "direct_attach": {
+      "delta_ms": 80.03597259521484,
+      "ratio": 1.0888190156373445,
+      "sigma": 3.5446476804196285,
+      "verdict": "REAL"
+    }
+  },
+  "noise_floor_used": {
+    "effect_mean_ms": -7.9364776611328125,
+    "single_diff_stdev_ms": 22.57938723708075
+  },
+  "meta": {
+    "vibium_version": "26.5.31",
+    "python": "3.13.2",
+    "measured_at": "2026-08-09T21:20:38+00:00",
+    "measured_at_epoch": 1786310438.121985,
+    "git_sha": "0fada1a"
+  },
+  "accounting": {
+    "timed": "each journey step individually; step_total is their sum",
+    "one_time": "per transport, reported separately and never inside a step: the daemon browser launch (shared), pipe's own second browser, and direct-attach's socket open",
+    "excluded": "warm-up reps, end-state verification, readiness polling (runs on every arm, recorded apart)",
+    "notes": "all three arms JS-dispatch \u2014 matched semantics, transport is the only variable that moves"
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "_readme": [
+    "Prose blocks for the board and handout, in the section order the official",
+    "PNSQC-2026-Poster-Template uses: Abstract / I. Introduction (Motivation,",
+    "Problem Definition) / II. Approach (A. Review, B. Experiment, C. Results) /",
+    "III. Conclusion, with numbered figures.",
+    "",
+    "Every measured figure lives in findings.json, not here. The builders read them",
+    "from there and cross-check the few that appear in both, so this file cannot",
+    "drift away from the evidence base.",
+    "",
+    "The board abstract is deliberately shorter than the submitted one: a reader",
+    "two metres away gets a paragraph, not a page. The submitted abstract stays in",
+    "PNSQC-PROPOSAL.md as the single source for the form."
+  ],
+  "meta": {
+    "title": "Skip the Wrapper",
+    "supertitle": "Making a Browser-Automation CLI Faster",
+    "subtitle": "Five optimizations measured under fixed semantics. One ships, and it is a packaging change.",
+    "authors": "Lana Begunova",
+    "affiliation": "Daisy Lady Bug · Seattle, WA",
+    "conference": "PNSQC 2026 · October 12–14, 2026 · Portland, Oregon",
+    "repo": "github.com/lana-20/vibium-efficiency",
+  "article": "daisyladybug.com/blog/making-vibium-cli-faster/",
+    "repro": "github.com/lana-20/vibium-cli-startup-repro"
+  },
+  "abstract": [
+    "An agent driving a browser through a CLI issues hundreds of sequential commands, so per-call overhead — not per-call work — sets the pace. This study measured five candidate optimizations for one such CLI (Vibium, OSS) across two real journeys under fixed semantics.",
+    "<b>Four did not survive.</b> One persistent-process technique <b>lost</b> outright. One was faster only because it stopped checking that elements were actionable — time bought by doing less. One vanished under measurement. The winner turned out not to be an optimization at all but a <b>packaging defect</b>: the command on your PATH is a 41-line Node script that spawns the real binary, so every invocation pays a Node runtime boot first."
+  ],
+  "introduction": {
+    "motivation": "Agent-driven test automation inverts the usual cost model. A human runs one command and waits; an agent runs a hundred, and the fixed cost of each one dominates. That makes per-invocation overhead a first-class performance property of a CLI — and it is the property nobody profiles, because on a single interactive command it is invisible. The question here is narrow and practical: for one widely used browser-automation CLI, where does the time actually go, and which of the obvious fixes survives contact with a real journey?",
+    "problem": "The trap is that almost any change makes a benchmark faster if you let the benchmark change too. Skip an actionability check and clicks get quicker; hold a browser open and startup leaves the total. Neither is a faster tool. So every arm here holds <b>semantics fixed</b>, reports one-time setup <b>apart</b> from the journey, <b>equalises</b> readiness polling, and is compared against a <b>noise floor measured from a control the change cannot have touched</b>. Under those rules, most of the candidates stopped looking like wins."
+  },
+  "approach": {
+    "review": {
+      "lead": "Five techniques, two AUTs, semantics fixed. Absolute milliseconds lead: the same underlying factor measured at two dispatch levels produced ratios differing by 1.85× on identical data, so a ratio without its level is not a result.",
+      "close": "Only <b>T1</b> is free. It changes nothing about what the tool does — same verbs, same arguments, same actionability-checked <code>click</code> and <code>fill</code>, byte-identical output — because it is not a change to the tool at all. It is a change to how the tool is installed."
+    },
+    "experiment": {
+      "lead": "The <b>wrapper</b> is the whole finding. <code>vibium</code> on <code>PATH</code> is not Vibium: it is a Node script that resolves a platform package and <code>execFileSync</code>s the real native binary. Every <code>vibium &lt;verb&gt;</code> is two process spawns, and the first is a Node runtime boot — paid before any browser work begins.",
+      "measure": "On a near-empty command the shim costs ~118ms against ~10ms calling the platform binary directly. The gap is constant whatever the command does, which is what a runtime boot looks like and not what work looks like.",
+      "limit": "That per-call figure does <b>not</b> multiply into a journey total. On the flat profile 6 × 106.19ms predicts 637ms against 405ms measured, and the 232ms shortfall is 10.3× the campaign's own 22.6ms single-difference floor. The tax is <b>partly self-refunding</b>: the shim arm arrives at each post-navigate command ~107ms later, and a later-arriving call is a cheaper call."
+    },
+    "results": {
+      "lead": "The refund is real, bounded, and its mechanism is only three-quarters of the story.",
+      "refund_head": "The refund shrinks with page weight — but not to zero",
+      "refund": "A falsifier was registered before running: <i>on a page with nothing to hydrate, the refund must vanish.</i> It shrank monotonically with page weight — 82.5ms on a heavy-JS site, 55.2ms on a lighter one, <b>19.2ms on a bare static page</b> — the mechanism behaving exactly as claimed. But 19.2ms survived, bootstrap CI [+3.3, +22.6], <b>excluding zero.</b> Hydration explains roughly 77% of the effect and is the right account of why it varies; it is not the whole account of why it exists. <b>The prediction failed, and that is the useful part.</b>",
+      "mapper_head": "The residual is Chrome's BiDi mapper, not the page",
+      "mapper": "Chrome's WebDriver BiDi is not implemented in the browser. It is a JavaScript bundle in <b>its own renderer process</b>, a target Chrome names <code>BiDi-CDP Mapper</code>. Probed causally over CDP — which does not queue behind BiDi's own command handling — the mapper's context costs <b>10.3ms at t=0 and 0.9ms at t=150ms</b> after a navigation, while the page's context, as a control, stays flat. A fixed CPU loop on the page's own clock runs <i>marginally faster</i> right after load, so the page is not computing. The busy thread belongs to the automation layer.",
+      "patch_head": "The wrapper-skipper",
+      "patch": "The fix is not in the CLI. Resolve <code>bin</code> to the platform binary <b>at install time</b> — hard-link the real binary over the shim in <code>postinstall.js</code>, which is what esbuild already does — and the per-invocation boot disappears. It declines out loud rather than failing: on Windows, under Yarn, or on any link error it prints <code>vibium: keeping the Node shim (&lt;reason&gt;)</code> and leaves a working install alone.",
+      "patch_verified": "<b>13 runs, 710 reps, 0 mismatches</b>, saving 107.4–111.9ms per call at 40×–60× the measured noise floor. Every sweep was also run in reverse, so a direction effect could not hide in the result."
+    }
+  },
+  "conclusion": {
+    "lead": "One technique shipped, and the reason it shipped is the transferable part.",
+    "rule": "The cheapest performance win is often not in the code. It is in the packaging.",
+    "items": [
+      [
+        "Profile the invocation, not just the operation.",
+        "Per-call fixed cost is invisible at n=1 and worth 25–41% of a real journey at n=6–7. Agent workloads live at n=100."
+      ],
+      [
+        "Hold semantics fixed or you are not measuring speed.",
+        "The JS-dispatch arm was faster because it stopped checking actionability. Buying time by doing less is not an optimization."
+      ],
+      [
+        "Measure a noise floor from a control the change cannot have touched.",
+        "Timing the same arm twice per rep gives what a quiet machine produces when nothing happened — here 2.2ms on the patch sweep and 22.6ms on the campaign. Without it, 108ms is a number, not a result."
+      ],
+      [
+        "Lead with the absolute difference.",
+        "~11.6× is a true measurement of a near-empty command and a false claim about real work. The journey figures are 1.33× and 1.69×. A ratio inherits its denominator."
+      ],
+      [
+        "Register the falsifier before you re-run.",
+        "The refund mechanism was pushed to a prediction it could fail. It failed, at 19.2ms, and the failure located the residual."
+      ],
+      [
+        "Report the technique that lost, and why.",
+        "The persistent-process arm looked obviously right and came in at −740ms. Publishing that is what stops it being retried."
+      ]
+    ],
+    "close": "Filed upstream, at a maintainer's public invitation, as an enhancement in the register the project's own CONTRIBUTING.md asks for — symptom first, patch offered in one line at the end, and an explicit statement of who it does <b>not</b> help: MCP users get no benefit, because that is one long-lived process, and nobody notices 108ms on a single interactive command. It is scripted and agent-driven CLI use where it adds up."
+  },
+  "figures": {
+    "fig1": {
+      "n": 1,
+      "caption": "Journey saving by technique, both profiles, under fixed semantics. Positive is faster. <b>T4 is drawn hollow</b> because its saving is not comparable — it degrades semantics — and T2 is negative on both AUTs."
+    },
+    "fig2": {
+      "n": 2,
+      "caption": "The per-call tax by the position of the command in the journey. <code>after_poll</code> is the discriminator: a post-navigate position that pays the <i>full</i> tax, which rules out “post-navigate steps are simply different steps” and leaves the arrival-time refund as the explanation."
+    }
+  },
+  "diff": {
+    "file": "packages/vibium/postinstall.js — abridged; filed patch at repro:patch/postinstall.diff",
+    "lines": [
+      "+function maybeReplaceShimWithBinary(vibiumPath) {",
+      "+  if (os.platform() === 'win32') return 'skipped: win32';",
+      "+  if (isYarn())                 return 'skipped: yarn';",
+      "+  const shim = path.join(__dirname, 'bin', 'cli.js');",
+      "+  const tmp  = `${shim}.${process.pid}.tmp`;",
+      "+  try   { fs.linkSync(vibiumPath, tmp);",
+      "+          fs.renameSync(tmp, shim);   // atomic swap, keeps the shim on failure",
+      "+          return 'linked'; } catch { /* clean up tmp */ }",
+      "+}"
+    ],
+    "note": "Link then rename, so a failure never leaves a half-written entry point. Every skip path keeps the working shim."
+  },
+  "headline": {
+    "techniques_measured": 5,
+    "techniques_shipped": 1,
+    "per_call_ms": 108,
+    "journey_ms_navheavy": 691,
+    "campaign_journeys": 1050,
+    "verified_reps": 710,
+    "mismatches": 0,
+    "upstream_issue": 356
+  },
+  "honesty_board": {
+    "ratio_denominator": "~11.6× is a true measurement of a near-empty command. The journey figures are 1.33× and 1.69×.",
+    "retracted_55_180": "[RETRACTED] The persistent-process arm previously measured 55–180× on a trivial command; on a real journey it LOSES.",
+    "withdrawn_direction_effect": "A published ~2.9ms direction effect re-measured at −0.2ms and is withdrawn, in place.",
+    "noise_floor_first": "The floor is the same arm timed twice per rep — 2.2ms on the patch sweep, 22.6ms on the campaign. The saving is 40×–60× the sweep's.",
+    "prediction_before_run": "The refund's falsifier was registered first. It fired at 19.2ms, and that located the residual."
+  }
+}

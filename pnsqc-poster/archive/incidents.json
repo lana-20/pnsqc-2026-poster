@@ -1,0 +1,167 @@
+{
+  "_readme": [
+    "Evidence base for the measurement-integrity poster.",
+    "",
+    "Every incident here is one this project actually had, with a file:line or commit",
+    "that can be opened. Nothing is included on recollection: entries whose source",
+    "could not be produced were dropped, not softened.",
+    "",
+    "The thesis these support: in each case the check passed because it was",
+    "structurally incapable of failing. Not a wrong answer -- a right-looking answer",
+    "from a question that could only be answered one way.",
+    "",
+    "`class` groups them by HOW the check was incapable of failing, which is the",
+    "poster's spine. The five classes are the finding; the twelve incidents are evidence."
+  ],
+  "classes": {
+    "unguarded": "No check existed for this surface. It passed by not being asked.",
+    "half_armed": "A check existed and covered part of its surface. The uncovered part reported success.",
+    "wrong_estimator": "The check ran, but the statistic it computed could not detect the thing it was for.",
+    "absent_evidence": "The figure had no stored output, so nothing could be checked against anything.",
+    "cross_artifact": "Every check was correct, fully armed, and looked at one artifact alone. Nothing compared a figure against the sibling document repeating it, or a reference against the file it pointed at."
+  },
+  "incidents": [
+    {
+      "id": "prose_drift_37pct",
+      "date": "2026-08-07",
+      "class": "unguarded",
+      "title": "A headline number wrong by ~37%, propagated across six files",
+      "detail": "The doc contradicted its own derived ratios. The raw data was correct the whole time; only the prose had drifted away from it.",
+      "how_found": "By hand, reading",
+      "prevention": "CLAIMS.json + scripts/verify_docs.py: every registered figure recomputed from raw data on every run",
+      "evidence": "README.md:78-84"
+    },
+    {
+      "id": "fake_verification_field",
+      "date": "2026-08-04",
+      "class": "absent_evidence",
+      "title": "A verification field that looked real and was hardcoded",
+      "detail": "batch1_ok reported a batched call's sub-steps had succeeded. Its `clicked` value was a literal `true`, so it confirmed itself regardless of what the browser did.",
+      "how_found": "Reading the harness while checking an unrelated aggregate",
+      "prevention": "Standing rule 4: verify against raw transcripts before trusting an aggregate field",
+      "evidence": "README.md:74-77"
+    },
+    {
+      "id": "dashboard_five_days",
+      "date": "2026-08-09",
+      "class": "half_armed",
+      "title": "A retracted figure served live for five days",
+      "detail": "The retired-value sentinel scanned .md but not .html. The repo copy of the figure was corrected; the published dashboard kept the retracted phrasing, and nothing could flag it.",
+      "exposure_days": 5,
+      "how_found": "By hand, during a full fact-check of all published pages",
+      "prevention": "verify_docs.py check 3 now scans .html as well -- the scan scope is part of the checker",
+      "evidence": "scripts/verify_docs.py:371-378"
+    },
+    {
+      "id": "absent_stored_output",
+      "date": "2026-08-10",
+      "class": "absent_evidence",
+      "title": "The recurring defect was never a wrong number -- it was a number with nothing behind it",
+      "detail": "Prose-only figures, unsaved probes, counts with nothing to count against. Every instance had been found by hand, days later. A cited probe that saves nothing produces a figure nobody can falsify.",
+      "probes_audited": 49,
+      "print_only": 9,
+      "print_only_and_cited": 0,
+      "how_found": "Root-causing why that week's defects all looked alike",
+      "prevention": "verify_docs.py check 6: a print-only probe that is cited anywhere is a build failure",
+      "evidence": "scripts/verify_docs.py:522-548, cli-v2/scripts/probes/audit_print_only.py"
+    },
+    {
+      "id": "preload_leak",
+      "date": "2026-08-10",
+      "class": "absent_evidence",
+      "title": "The one genuine case the evidence audit surfaced was a correctness bug, not a performance one",
+      "detail": "On the unpatched build a clock installed through an attached pipe stays patched in the daemon's own browser after that pipe exits, so every later client silently gets a faked time. Wrong, not merely slow.",
+      "leaked_unpatched": 1,
+      "leaked_patched": 0,
+      "how_found": "Saving output for a probe that had only ever printed",
+      "prevention": "Registered as a correctness claim with a falsifier guard",
+      "evidence": "CLAIMS.json claims preload_leaks_unpatched / preload_fixed_patched"
+    },
+    {
+      "id": "estimator_artifact",
+      "date": "2026-08-12",
+      "class": "wrong_estimator",
+      "title": "The drift was the estimator, not the system",
+      "detail": "A 14-event figure appeared to drift across runs. The three means were never statistically distinguishable (largest pairwise gap 6.10ms against a 12.80ms 2xSE). The t0 samples are bimodal -- the mapper is left either busy (~15-26ms) or already idle (~0.5-1.1ms), nothing between -- so a median-based window is a step function of the busy fraction, collapsing to ~1ms the moment busy samples stop being a majority.",
+      "killer_detail": "The subscribed state sits at 80-93% busy, safely inside one mode. The unsubscribed baseline hovers near 50%, right on the discontinuity. The estimator was least reliable exactly where the effect is measured from.",
+      "median_spread_ms": 6.1,
+      "mean_spread_ms": 2.92,
+      "replication_runs": 5,
+      "how_found": "Registering predictions and falsifiers before re-running",
+      "prevention": "Mean, not median, for a mixture; predictions registered in advance",
+      "evidence": "cli-v2/docs/TECHNIQUES.md:396-424"
+    },
+    {
+      "id": "rederivation_not_replication",
+      "date": "2026-08-12",
+      "class": "wrong_estimator",
+      "title": "The better-looking number was the invalid one",
+      "detail": "The corrected mean figures were first obtained by re-deriving three median-era runs. That reuses the same samples, so it cannot show the figure reproduces. Its spread (1.63ms) looks better than the 2.92ms measured across five independent re-runs -- and is the one that must not be published.",
+      "rederived_spread_ms": 1.63,
+      "independent_spread_ms": 2.92,
+      "prevention": "Re-run from scratch with the correction baked in, against predictions registered beforehand",
+      "evidence": "cli-v2/docs/TECHNIQUES.md:375-383"
+    },
+    {
+      "id": "unregistered_figure",
+      "date": "2026-08-13",
+      "class": "unguarded",
+      "title": "421 checks passed while the front page contradicted the verdict",
+      "detail": "README answered 'Does a persistent process fix that?' with 'Yes -- vibium pipe cuts marginal per-call cost ~55-180x'. The project's own verdict table has that technique as LOSES, and the dashboard already showed the figure struck through as retracted. The value had never been added to any claim's retired list, so the sentinel could not see it.",
+      "checks_passing_at_the_time": 421,
+      "lines_firing_once_registered": 17,
+      "genuinely_wrong": 4,
+      "correct_history_needing_a_marker": 13,
+      "prevention": "Registered as retired; explicit [RETRACTED] marker convention for legitimate history",
+      "evidence": "commit 3510f08"
+    },
+    {
+      "id": "half_armed_sentinel",
+      "date": "2026-08-13",
+      "class": "half_armed",
+      "title": "A retirement that was recorded, stored, and never once enforced",
+      "detail": "verify_docs.py built its retired-value map from spec['claims'] only, never spec['derived']. Three retirements on derived figures were inert. Worse than a missing registration: someone followed the project's own rule and got no protection for it.",
+      "inert_retirements": 3,
+      "lines_caught_once_armed": 4,
+      "prevention": "Iterate both registries; scripts/test_verify_docs.py asserts it structurally and behaviourally",
+      "evidence": "commit e70951d"
+    },
+    {
+      "id": "declared_withdrawal",
+      "date": "2026-08-09",
+      "class": "wrong_estimator",
+      "title": "A falsifier that fired, kept visible instead of quietly dropped",
+      "detail": "Two registered falsifiers fired and their findings were withdrawn. They still run on every verification pass and report as declared warnings, so the withdrawal cannot be forgotten and a stale withdrawal cannot masquerade as a live finding.",
+      "prevention": "verify_docs.py check 5 warns on a fired-and-declared guard rather than removing it",
+      "evidence": "cli-v2/README.md:165, cli-v2/README.md:369, scripts/verify_docs.py:479"
+    },
+    {
+      "id": "sibling_divergence",
+      "date": "2026-08-15",
+      "class": "cross_artifact",
+      "title": "A figure corrected in one artifact and left in its sibling — twice",
+      "detail": "The published headline was re-measured from ~110ms to ~108ms. The correction went into the upstream draft and not into the public repro README, which is the document a maintainer actually lands on. This had already happened once before, in the other direction, and a checker built after the first instance did not prevent the second because it only ever read one artifact.",
+      "killer_detail": "The tell was not a data mismatch — every figure agreed with its stored runs. The text said ~118ms through the shim and ~10ms direct, then called the gap ~110ms. 118 minus 10 is 108. Nobody caught it by reading, across several deliberate review passes; subtracting caught it instantly.",
+      "how_found": "Checking that a document's own numbers are consistent with each other",
+      "prevention": "A cross-artifact check comparing the draft against the PUBLISHED repro README (uncached API, not the CDN, which served stale content for minutes after a push), plus an assertion that each document's own figures subtract correctly",
+      "evidence": "pnsqc-poster/scripts/verify_draft.py, commit 53be881"
+    },
+    {
+      "id": "orphaned_reference",
+      "date": "2026-08-14",
+      "class": "cross_artifact",
+      "title": "Pointers that outlived what they pointed at",
+      "detail": "Three in one document set. The reproduction section sent maintainers to a harness that had moved into `archive/` during a reorg. A test file was shipped, and the README told readers to run it, while its own inventory table never listed it. And a path in TODO.md had pointed at a file that moved months earlier.",
+      "killer_detail": "None of these is a wrong number, so a registry that recomputes every figure from raw data passes all three. The defect is a claim that was true when written and was broken later by an edit somewhere else.",
+      "how_found": "Checking that every command and path a document names actually resolves",
+      "prevention": "verify_draft.py checks references, not arithmetic; an inventory check covers the file table",
+      "evidence": "pnsqc-poster/scripts/verify_draft.py, commit 451071b"
+    }
+  ],
+  "excluded": [
+    {
+      "what": "candy-mapping's loose success pattern and its drift overstatement",
+      "why": "Different repo and a different project's findings. Strong material, but this poster's claim is about one verification system, and mixing in a second dilutes that."
+    }
+  ]
+}

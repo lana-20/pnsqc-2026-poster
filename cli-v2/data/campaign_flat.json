@@ -1,0 +1,181 @@
+{
+  "profile": "flat",
+  "k_repeats": 5,
+  "n_per_arm": 15,
+  "is_control_profile": true,
+  "launch_ms": 1011.0430717468262,
+  "per_repeat": [
+    {
+      "wrapper_real": 1636.3446712493896,
+      "wrapper_js": 1399.0135192871094,
+      "native_real": 1259.05179977417,
+      "native_js": 993.2491779327393
+    },
+    {
+      "wrapper_real": 1636.5246772766113,
+      "wrapper_js": 1380.727767944336,
+      "native_real": 1236.2470626831055,
+      "native_js": 977.6983261108398
+    },
+    {
+      "wrapper_real": 1592.0600891113281,
+      "wrapper_js": 1385.9374523162842,
+      "native_real": 1214.0858173370361,
+      "native_js": 970.1683521270752
+    },
+    {
+      "wrapper_real": 1658.693790435791,
+      "wrapper_js": 1383.8942050933838,
+      "native_real": 1225.1346111297607,
+      "native_js": 992.7060604095459
+    },
+    {
+      "wrapper_real": 1653.386116027832,
+      "wrapper_js": 1399.7154235839844,
+      "native_real": 1218.8711166381836,
+      "native_js": 952.1651268005371
+    }
+  ],
+  "effect_samples": {
+    "binary@real": [
+      377.2928714752197,
+      400.27761459350586,
+      377.974271774292,
+      433.5591793060303,
+      434.51499938964844
+    ],
+    "binary@js": [
+      405.7643413543701,
+      403.0294418334961,
+      415.769100189209,
+      391.1881446838379,
+      447.55029678344727
+    ],
+    "dispatch@wrapper": [
+      237.33115196228027,
+      255.7969093322754,
+      206.12263679504395,
+      274.7995853424072,
+      253.67069244384766
+    ],
+    "dispatch@native": [
+      265.80262184143066,
+      258.5487365722656,
+      243.91746520996094,
+      232.42855072021484,
+      266.7059898376465
+    ]
+  },
+  "interaction_samples": [
+    -28.47146987915039,
+    -2.7518272399902344,
+    -37.79482841491699,
+    42.37103462219238,
+    -13.035297393798828
+  ],
+  "effects": {
+    "binary@real": {
+      "n": 5,
+      "median": 400.27761459350586,
+      "mean": 404.72378730773926,
+      "stdev": 28.314114525683554,
+      "min": 377.2928714752197,
+      "max": 434.51499938964844
+    },
+    "binary@js": {
+      "n": 5,
+      "median": 405.7643413543701,
+      "mean": 412.66026496887207,
+      "stdev": 21.379532517960907,
+      "min": 391.1881446838379,
+      "max": 447.55029678344727
+    },
+    "dispatch@wrapper": {
+      "n": 5,
+      "median": 253.67069244384766,
+      "mean": 245.5441951751709,
+      "stdev": 25.732029181629343,
+      "min": 206.12263679504395,
+      "max": 274.7995853424072
+    },
+    "dispatch@native": {
+      "n": 5,
+      "median": 258.5487365722656,
+      "mean": 253.4806728363037,
+      "stdev": 14.891872723049191,
+      "min": 232.42855072021484,
+      "max": 266.7059898376465
+    }
+  },
+  "arms": {
+    "wrapper_real": {
+      "n": 5,
+      "median": 1636.5246772766113,
+      "mean": 1635.4018688201904,
+      "stdev": 26.20403692064788,
+      "min": 1592.0600891113281,
+      "max": 1658.693790435791
+    },
+    "wrapper_js": {
+      "n": 5,
+      "median": 1385.9374523162842,
+      "mean": 1389.8576736450195,
+      "stdev": 8.87821792108264,
+      "min": 1380.727767944336,
+      "max": 1399.7154235839844
+    },
+    "native_real": {
+      "n": 5,
+      "median": 1225.1346111297607,
+      "mean": 1230.6780815124512,
+      "stdev": 17.899156077642388,
+      "min": 1214.0858173370361,
+      "max": 1259.05179977417
+    },
+    "native_js": {
+      "n": 5,
+      "median": 977.6983261108398,
+      "mean": 977.1974086761475,
+      "stdev": 17.135133972347234,
+      "min": 952.1651268005371,
+      "max": 993.2491779327393
+    }
+  },
+  "correct": {
+    "wrapper_real": 75,
+    "wrapper_js": 75,
+    "native_real": 75,
+    "native_js": 75
+  },
+  "expected_correct": {
+    "wrapper_real": 75,
+    "wrapper_js": 75,
+    "native_real": 75,
+    "native_js": 75
+  },
+  "poll_cost_median": {
+    "wrapper_real": 0.0,
+    "wrapper_js": 0.0,
+    "native_real": 0.0,
+    "native_js": 0.0
+  },
+  "effect_mean_ms": -7.9364776611328125,
+  "effect_stdev_ms": 31.212703222897247,
+  "effect_ptp_ms": 80.16586303710938,
+  "single_diff_stdev_ms": 22.57938723708075,
+  "term_stdev_ms": 16.86388643368269,
+  "meta": {
+    "vibium_version": "26.5.31",
+    "python": "3.13.2",
+    "measured_at": "2026-08-09T20:37:48+00:00",
+    "measured_at_epoch": 1786307868.4993439,
+    "git_sha": "05bc3a5"
+  },
+  "accounting": {
+    "timed": "each journey step individually; step_total is their sum",
+    "one_time": "daemon browser launch \u2014 once, before any repeat, shared by all arms",
+    "excluded": "warm-up reps, end-state verification, readiness polling (polling runs on EVERY arm and is recorded apart, so it cannot be charged to one side as it was in v1)",
+    "notes": "floor and effects derived from the same repeats, so they cannot drift apart; one harness, one journey definition, one convention"
+  },
+  "build": "v26.5.31"
+}
