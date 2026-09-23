@@ -6,6 +6,7 @@ than a QR-shaped texture an image model drew.
 
 | file | what it is |
 |---|---|
+| `linkedin-post.md` | the announcement post text, alt text, and posting notes |
 | `pnsqc-linkedin-card.png` | the post image — 2400×1254, i.e. 1200×627 at 2×, LinkedIn's native ratio |
 | `linkedin-card.html` | its source. Edit, then re-render (below) |
 | `qr-register.svg` | the bare QR, vector — use this on the board or the handout |
