@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Skip the Wrapper</title>
+<meta name="description" content="PNSQC 2026 poster paper. Five browser-CLI optimizations measured under fixed semantics; one ships, and it is a packaging change.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root{
+  --paper:#EEF1F3; --surface:#FFFFFF; --sunk:#E4E9EC;
+  --ink:#14181B; --ink2:#4A545B; --ink3:#6E7A82;
+  --rule:#CBD4D9; --rule2:#DCE3E7;
+  --accent:#0B5FA5; --accent-soft:#D9E7F3;
+  --ship:#0E6E4E; --loses:#A33224; --flat:#7A868E;
+  --shadow:0 1px 2px rgba(20,24,27,.07), 0 6px 18px -10px rgba(20,24,27,.22);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1214; --surface:#161C1F; --sunk:#111619;
+    --ink:#E6ECEF; --ink2:#9BA8AF; --ink3:#7C8890;
+    --rule:#2A343A; --rule2:#212a2f;
+    --accent:#5AA9E6; --accent-soft:#17303F;
+    --ship:#3FB98A; --loses:#E0705C; --flat:#79868D;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1214; --surface:#161C1F; --sunk:#111619;
+  --ink:#E6ECEF; --ink2:#9BA8AF; --ink3:#7C8890;
+  --rule:#2A343A; --rule2:#212a2f;
+  --accent:#5AA9E6; --accent-soft:#17303F;
+  --ship:#3FB98A; --loses:#E0705C; --flat:#79868D;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+  font-size:16px; line-height:1.6;
+}
+.wrap{max-width:62rem; margin:0 auto; padding-inline:20px; padding-block:0}
+h1,h2,h3,.disp{font-family:"IBM Plex Sans Condensed","Helvetica Neue",Arial,sans-serif; text-wrap:balance}
+.mono,code,.num{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+
+/* ---- masthead ---- */
+.mast{border-bottom:1px solid var(--rule); background:var(--surface)}
+.mast .wrap{display:flex; flex-wrap:wrap; gap:12px 20px; align-items:baseline; padding-block:14px}
+.venue{font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink3)}
+.mast nav{margin-left:auto; display:flex; flex-wrap:wrap; gap:16px; font-family:"IBM Plex Mono",monospace; font-size:12.5px}
+
+/* ---- hero ---- */
+.hero{padding-block:44px 34px; border-bottom:1px solid var(--rule)}
+h1{font-size:clamp(2.3rem,6.4vw,3.9rem); line-height:1.02; font-weight:700; letter-spacing:-.018em; margin:0 0 6px}
+.sub{font-size:clamp(1.02rem,2vw,1.2rem); color:var(--ink2); max-width:40em; margin:0 0 26px; font-style:italic}
+.thesis{font-size:1.06rem; max-width:34em; margin:0}
+.thesis b{font-weight:500; background:linear-gradient(transparent 62%, var(--accent-soft) 62%)}
+
+.figures{display:grid; grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr)); gap:1px; background:var(--rule2);
+  border:1px solid var(--rule); margin-top:30px}
+.fig{background:var(--surface); padding:14px 16px 15px}
+.fig .n{display:block; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums;
+  font-size:1.62rem; font-weight:600; letter-spacing:-.02em; line-height:1.1; color:var(--ink)}
+.fig .n .u{font-size:.92rem; font-weight:400; color:var(--ink3)}
+.fig .k{display:block; margin-top:5px; font-family:"IBM Plex Mono",monospace; font-size:11px;
+  letter-spacing:.07em; text-transform:uppercase; color:var(--ink3); line-height:1.45}
+
+/* ---- sections ---- */
+section{padding-block:40px; border-bottom:1px solid var(--rule)}
+h2{font-size:1.5rem; font-weight:600; letter-spacing:-.008em; margin:0 0 4px}
+.lede{color:var(--ink2); margin:0 0 26px; max-width:44em}
+
+/* ---- ledger ---- */
+.ledger{width:100%; border-collapse:collapse; font-size:14.5px}
+.ledger caption{caption-side:bottom; text-align:left; padding-top:12px; font-size:12.5px; color:var(--ink3); line-height:1.5}
+.ledger th{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--ink3); font-weight:500; text-align:left; padding:0 10px 8px 0; border-bottom:1px solid var(--rule)}
+.ledger td{padding:11px 10px 11px 0; border-bottom:1px solid var(--rule2); vertical-align:middle}
+.ledger tr:last-child td{border-bottom:1px solid var(--rule)}
+.tid{font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--ink3); width:2.4rem}
+.tname{font-weight:500}
+.tname .why{display:block; color:var(--ink3); font-size:12.8px; font-style:italic; line-height:1.4; margin-top:1px}
+.verdict{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+  white-space:nowrap; padding:3px 7px; border:1px solid currentColor; border-radius:2px}
+.v-ship{color:var(--ship)} .v-lose{color:var(--loses)} .v-flat{color:var(--flat)} .v-narrow{color:var(--accent)}
+.ms{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap; width:6.2rem}
+.ms.pos{color:var(--ship)} .ms.neg{color:var(--loses)} .ms.nil{color:var(--ink3)}
+
+/* diverging bar, zero-baseline at 50% */
+.bar{position:relative; height:16px; min-width:8rem; background:var(--sunk); border:1px solid var(--rule2)}
+.bar::before{content:""; position:absolute; left:50%; top:-1px; bottom:-1px; width:1px; background:var(--rule)}
+.bar i{position:absolute; top:2px; bottom:2px; display:block}
+.bar i.p{left:50%; background:var(--ship)}
+.bar i.n{right:50%; background:var(--loses)}
+.bar i.d{left:50%; background:repeating-linear-gradient(135deg,var(--ink3) 0 2px,transparent 2px 5px);
+  border:1px dashed var(--ink3); opacity:.85}
+.legend{display:flex; flex-wrap:wrap; gap:8px 20px; margin-top:14px; font-family:"IBM Plex Mono",monospace;
+  font-size:11.5px; color:var(--ink3)}
+.legend span{display:inline-flex; align-items:center; gap:7px}
+.sw{width:15px; height:9px; display:inline-block; border:1px solid var(--rule)}
+.sw.p{background:var(--ship); border-color:var(--ship)}
+.sw.n{background:var(--loses); border-color:var(--loses)}
+.sw.d{border:1px dashed var(--ink3); background:repeating-linear-gradient(135deg,var(--ink3) 0 2px,transparent 2px 5px)}
+.scroller{overflow-x:auto}
+
+/* ---- asset cards ---- */
+.assets{display:grid; grid-template-columns:repeat(auto-fit,minmax(16rem,1fr)); gap:18px}
+.asset{background:var(--surface); border:1px solid var(--rule); box-shadow:var(--shadow);
+  display:flex; flex-direction:column; padding:20px}
+.asset h3{margin:0 0 2px; font-size:1.18rem; font-weight:600}
+.trim{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.07em; text-transform:uppercase; color:var(--ink3)}
+.asset p{margin:12px 0 0; font-size:14.6px; color:var(--ink2); flex:1}
+.asset .go{margin-top:18px; display:inline-flex; align-items:center; gap:8px; align-self:flex-start;
+  font-family:"IBM Plex Sans Condensed",sans-serif; font-weight:600; font-size:15px;
+  text-decoration:none; color:var(--surface); background:var(--accent);
+  padding:9px 15px; border-radius:2px}
+.asset .go:hover{filter:brightness(1.1)}
+.asset .print{margin-top:12px; font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink3); line-height:1.55}
+
+/* ---- checks ---- */
+.checks{display:grid; grid-template-columns:repeat(auto-fit,minmax(14rem,1fr)); gap:1px; background:var(--rule2);
+  border:1px solid var(--rule)}
+.check{background:var(--surface); padding:16px 17px}
+.check h4{margin:0 0 6px; font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--accent); font-weight:600}
+.check p{margin:0; font-size:14.2px; color:var(--ink2)}
+.files{margin:26px 0 0; padding:0; list-style:none; border-top:1px solid var(--rule2)}
+.files li{border-bottom:1px solid var(--rule2); padding:9px 0; display:flex; flex-wrap:wrap; gap:4px 14px; align-items:baseline}
+.files a{font-family:"IBM Plex Mono",monospace; font-size:13.4px; text-decoration:none}
+.files a:hover{text-decoration:underline}
+.files em{color:var(--ink3); font-size:13.4px; font-style:normal}
+
+footer{padding-block:30px 44px; color:var(--ink3); font-size:13.6px}
+footer p{margin:0 0 8px; max-width:48em}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <span class="venue">PNSQC 2026 · Poster Paper</span>
+    <nav>
+      <a href="#ledger">Verdicts</a>
+      <a href="#assets">Poster &amp; handout</a>
+      <a href="#checks">How it's checked</a>
+      <a href="https://github.com/lana-20/pnsqc-2026-poster">Repo</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>Skip the Wrapper</h1>
+    <p class="sub">Making a browser-automation CLI faster — five candidate optimizations, measured under accounting rules that stop a change looking faster by quietly doing less.</p>
+    <p class="thesis"><b>The command on your <code>PATH</code> is not the tool.</b> It is a 41-line Node script that resolves a platform package and execs the real binary, so every invocation is two process spawns and the first is a runtime boot — paid before any browser work begins.</p>
+
+    <div class="figures">
+      <div class="fig"><span class="n">~108<span class="u">ms</span></span><span class="k">per invocation,<br>near-constant</span></div>
+      <div class="fig"><span class="n">691<span class="u">ms</span></span><span class="k">off a real<br>7-command journey</span></div>
+      <div class="fig"><span class="n">1,050</span><span class="k">timed journeys,<br>all verified</span></div>
+      <div class="fig"><span class="n">710</span><span class="k">patch reps,<br>0 mismatches</span></div>
+      <div class="fig"><span class="n">±22.6<span class="u">ms</span></span><span class="k">measured<br>noise floor</span></div>
+    </div>
+  </div>
+
+  <section id="ledger">
+    <h2>Four of the five did not survive</h2>
+    <p class="lede">Two real journeys: <span class="mono">flat</span> (6 commands, a practice shop) and <span class="mono">navheavy</span> (7 commands, saucedemo). Positive is faster. The bar is scaled to the largest magnitude measured — the 740ms <em>loss</em>.</p>
+
+    <div class="scroller">
+    <table class="ledger">
+      <caption>A technique that changes what the journey does is not a faster technique — its milliseconds are real but not comparable, so T4 is drawn hollow rather than ranked. Figures from <span class="mono">findings.json</span>, recomputed from raw run data.</caption>
+      <thead>
+        <tr><th>#</th><th>Technique</th><th>Verdict</th><th class="ms">flat</th><th class="ms">navheavy</th><th>relative to zero</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tid">T1</td>
+          <td class="tname">Call the native binary, not the shim<span class="why">not an optimization — a packaging defect</span></td>
+          <td><span class="verdict v-ship">Ship it</span></td>
+          <td class="ms pos">+405</td><td class="ms pos">+691</td>
+          <td><div class="bar"><i class="p" style="width:46.7%"></i></div></td>
+        </tr>
+        <tr>
+          <td class="tid">T3</td>
+          <td class="tname">Direct-attach BiDi socket<span class="why">gives up the actionability checks</span></td>
+          <td><span class="verdict v-narrow">Narrow case</span></td>
+          <td class="ms pos">+80</td><td class="ms pos">+45</td>
+          <td><div class="bar"><i class="p" style="width:5.4%"></i></div></td>
+        </tr>
+        <tr>
+          <td class="tid">T5</td>
+          <td class="tname">Flat post-navigate wait<span class="why">you cannot ask “ready yet?” without queueing</span></td>
+          <td><span class="verdict v-flat">No effect</span></td>
+          <td class="ms nil">—</td><td class="ms nil">—</td>
+          <td><div class="bar"></div></td>
+        </tr>
+        <tr>
+          <td class="tid">T4</td>
+          <td class="tname">JS-dispatch click and fill<span class="why">faster because it stops checking elements are actionable</span></td>
+          <td><span class="verdict v-flat">Not an optimization</span></td>
+          <td class="ms nil">+253</td><td class="ms nil">+665</td>
+          <td><div class="bar"><i class="d" style="width:44.9%"></i></div></td>
+        </tr>
+        <tr>
+          <td class="tid">T2</td>
+          <td class="tname">One persistent process<span class="why">a subscription it never releases, and it accumulates</span></td>
+          <td><span class="verdict v-lose">Loses</span></td>
+          <td class="ms neg">−740</td><td class="ms neg">−212</td>
+          <td><div class="bar"><i class="n" style="width:50%"></i></div></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="legend">
+      <span><i class="sw p"></i> faster, semantics unchanged</span>
+      <span><i class="sw n"></i> slower</span>
+      <span><i class="sw d"></i> real milliseconds, <b>not</b> a saving</span>
+    </div>
+  </section>
+
+  <section id="assets">
+    <h2>The artifacts</h2>
+    <p class="lede">Both are built from the evidence base and measured to fit the paper they declare. Open in Chrome, then Print → Save as PDF.</p>
+    <div class="assets">
+      <div class="asset">
+        <h3>Poster board</h3>
+        <span class="trim">A0 portrait · 841 × 1189 mm · 1:1</span>
+        <p>The full argument: five verdicts, the per-call tax by position, the patch, and the honesty rules the study was run under. Built to the official PNSQC template's own section order and trim.</p>
+        <a class="go" href="./pnsqc-poster/assets/poster-board.html">Open the board →</a>
+        <span class="print">paper A0 · margins None · background graphics ON</span>
+      </div>
+      <div class="asset">
+        <h3>Handout</h3>
+        <span class="trim">2 × US Letter · takeaway</span>
+        <p>The pointers rather than the charts — the verdict table with its evidence column, who the upstream fix does not help, and where to reproduce the headline number yourself.</p>
+        <a class="go" href="./pnsqc-poster/assets/handout.html">Open the handout →</a>
+        <span class="print">paper Letter · margins Default · background graphics ON</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="checks">
+    <h2>How the figures are kept honest</h2>
+    <p class="lede">The board will not build if it disagrees with the evidence base. The evidence base is then checked three ways that are not the same thing.</p>
+    <div class="checks">
+      <div class="check"><h4>Resolve</h4><p>Every pointer opens — file, line range, commit. Cheap, and proves nothing about content.</p></div>
+      <div class="check"><h4>Quote</h4><p>The cited line still <em>contains</em> the figure claimed. This is the one that catches a figure broken by a later edit somewhere else.</p></div>
+      <div class="check"><h4>Math</h4><p>The arithmetic the prose rests on: 118 − 10 = 108, a stated loss is negative in the data, the sweep's spread matches its runs.</p></div>
+      <div class="check"><h4>Fit</h4><p>Both artifacts are measured against the paper they declare. Validated by planting violations and watching them fail.</p></div>
+    </div>
+
+    <ul class="files">
+      <li><a href="./pnsqc-poster/PNSQC-PROPOSAL.md">PNSQC-PROPOSAL.md</a> <em>title, 484-word abstract, bio</em></li>
+      <li><a href="./pnsqc-poster/LEARNING-OBJECTIVES.md">LEARNING-OBJECTIVES.md</a> <em>what an attendee leaves able to do</em></li>
+      <li><a href="./pnsqc-poster/findings.json">findings.json</a> <em>the evidence base every figure is drawn from</em></li>
+      <li><a href="./cli-v2/docs/TECHNIQUES.md">cli-v2/docs/TECHNIQUES.md</a> <em>the verdict page the poster cites</em></li>
+      <li><a href="./cli-v2/docs/PIPE_SUBSCRIBE_TAX.md">cli-v2/docs/PIPE_SUBSCRIBE_TAX.md</a> <em>why the persistent process loses</em></li>
+      <li><a href="./pnsqc-poster/READINESS.md">READINESS.md</a> <em>the live checklist, including what is still open</em></li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Filed upstream at a maintainer's public invitation as <a href="https://github.com/VibiumDev/vibium/issues/356">vibium#356</a>, closed as completed 2026-08-25 and merged as <a href="https://github.com/VibiumDev/vibium/pull/432">PR #432</a>. Reproduce the per-call constant yourself: <a href="https://github.com/lana-20/vibium-cli-startup-repro">vibium-cli-startup-repro</a> — <span class="mono">python3 measure.py 50 mine</span>, about two minutes, and it does not touch your install.</p>
+    <p><b>One ratio may be quoted, and it is not the big one.</b> Removing a runtime boot from a near-empty command is 11.6×, because ~92% of that call is Node boot. On real journeys the same change is 1.33× and 1.69×. A ratio inherits its denominator, so absolute milliseconds lead throughout.</p>
+    <p>Lana Begunova · <a href="https://github.com/lana-20/pnsqc-2026-poster">github.com/lana-20/pnsqc-2026-poster</a> · MIT, except the PNSQC banner and logo, which are PNSQC's own.</p>
+  </footer>
+
+</div>
+</body>
+</html>
