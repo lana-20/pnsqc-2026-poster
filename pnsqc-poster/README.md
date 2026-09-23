@@ -24,7 +24,7 @@ so `verify_findings.py` passes standalone.
 ```
 pnsqc-poster/
   READINESS.md            live checklist: decisions, blockers, submission mechanics
-  PNSQC-PROPOSAL.md       the submission itself — title, 468-word abstract, bio
+  PNSQC-PROPOSAL.md       the submission itself — title, 484-word abstract, bio
   findings.json           the evidence base: verdicts, the wrapper, the patch, the sweep
   UPSTREAM-ISSUE-DRAFT.md the #356 report as filed, plus the backing document
   DRAFT-EVIDENCE.md       append-only snapshots taken before filing #356

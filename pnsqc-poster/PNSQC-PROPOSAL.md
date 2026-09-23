@@ -5,7 +5,14 @@
 **Notification:** Sept 24 · first draft poster to reviewer Sept 28 · feedback Sept 30
 **Conference:** **Oct 12–14, 2026**
 **Perk:** 50% off registration for accepted poster authors
-**Contact:** program committee, pnsqc.org/conference/2026/poster/
+**Contact:** program committee, pnsqc.org/conference/2026/poster/ · poster paper manager
+Ram Grandhe, ram.grandhe@pnsqc.org
+
+**SUBMITTED 2026-09-22 07:28 — submission ID 139.** Title, this abstract and this bio went
+in as written below, with a PDF of the board printed from
+<https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/poster-board.html>.
+Editable at any time via the submission account; committee notifies Sept 24, first draft to
+the assigned reviewer Sept 28.
 
 Subject set 2026-08-15: **making the Vibium CLI faster, and the wrapper-skipper that
 does it.** Evidence base: `pnsqc-poster/findings.json`, checked by
@@ -99,16 +106,16 @@ Two numbers describe the same result and only one may be quoted. Removing a runt
 
 ---
 
-## Bio (100 words)
+## Bio (98 words — as submitted, PNSQC submission 139)
 
 **Lana Begunova** is an AI, UI, and API SDET with seven years in test automation and the
 founder of Mobium AI, a test automation consultancy in Seattle. She builds automation
-frameworks with OSS tools like Selenium WebDriver BiDi, Appium, and now Vibium and
-Mobium. She spends most of her research time on agent-driven browser automation. She is
-credited in the Vibium v26.5.31 release for "an extraordinary amount of systematic,
-cross-client testing," having filed 50+ defects across its CLI, MCP server, and
-JavaScript, Python, and Java clients. She publishes her benchmarks and methodology
-openly at github.com/lana-20. ISTQB CTFL, AWS CCP, CSM.
+frameworks with OSS tools like Selenium WebDriver BiDi, Appium, and now Vibium alongside
+her new creation Mobium. She spends most of her research time on agent-driven browser
+automation. She is credited in the Vibium v26.5.31 release for "an extraordinary amount of
+systematic, cross-client testing", having filed 80+ defects across its CLI, MCP server, and
+JavaScript, Python, and Java clients. She publishes her benchmarks and methodology openly
+at https://github.com/lana-20/pnsqc-2026-poster.
 
 ---
 
