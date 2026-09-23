@@ -8,11 +8,12 @@
 **Contact:** program committee, pnsqc.org/conference/2026/poster/ · poster paper manager
 Ram Grandhe, ram.grandhe@pnsqc.org
 
-**SUBMITTED 2026-09-22 07:28 — submission ID 139.** Title, this abstract and this bio went
+**ACCEPTED 2026-09-23 — submission ID 139, filed 2026-09-22 07:28.** Title, this abstract and this bio went
 in as written below, with a PDF of the board printed from
 <https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/poster-board.html>.
-Editable at any time via the submission account; committee notifies Sept 24, first draft to
-the assigned reviewer Sept 28.
+Accepted ahead of the Sept 24 notification date. **Next milestone: first draft poster to the
+assigned reviewer by Sept 28**, reviewer feedback Sept 30. The submission stays editable via
+the submission account.
 
 Subject set 2026-08-15: **making the Vibium CLI faster, and the wrapper-skipper that
 does it.** Evidence base: `pnsqc-poster/findings.json`, checked by

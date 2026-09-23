@@ -3,8 +3,8 @@
 **Live → [lana-20.github.io/pnsqc-2026-poster](https://lana-20.github.io/pnsqc-2026-poster/)** · [Poster board (A0)](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/poster-board.html)
 · [Handout (2 Letter)](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/handout.html)
 
-Poster paper for the [Pacific NW Software Quality Conference](https://pnsqc.org/conference/2026/poster/),
-Portland, October 12–14 2026 (technical conference 12–13, workshops the 14th). Everything needed to rebuild the board, the handout and the
+**Accepted** for the [Pacific NW Software Quality Conference](https://pnsqc.org/conference/2026/poster/),
+Portland, October 12–14 2026 (technical conference 12–13, workshops the 14th). Submission 139. Everything needed to rebuild the board, the handout and the
 submission is here, and every figure on them is checked against its source before either
 artifact will build.
 
@@ -42,7 +42,8 @@ every client that made one. Four attach-and-leave cycles take one journey from 8
 
 | file | what it is |
 |---|---|
-| [`pnsqc-poster/PNSQC-PROPOSAL.md`](pnsqc-poster/PNSQC-PROPOSAL.md) | the submission as filed — title, 484-word abstract, bio (PNSQC submission 139, 2026-09-22) |
+| [`pnsqc-poster/PNSQC-PROPOSAL.md`](pnsqc-poster/PNSQC-PROPOSAL.md) | the accepted submission — title, 484-word abstract, bio (PNSQC 139, filed 2026-09-22, accepted 2026-09-23) |
+| [`promo/`](promo/) | announcement card and the registration QR, with its scannability measured |
 | [`pnsqc-poster/LEARNING-OBJECTIVES.md`](pnsqc-poster/LEARNING-OBJECTIVES.md) | what an attendee leaves able to do |
 | [**Poster board**](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/poster-board.html) — A0 portrait, 1:1, print-ready | rendered; source at [`pnsqc-poster/assets/poster-board.html`](pnsqc-poster/assets/poster-board.html) |
 | [**Handout**](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/handout.html) — 2 US Letter pages | rendered; source at [`pnsqc-poster/assets/handout.html`](pnsqc-poster/assets/handout.html) |

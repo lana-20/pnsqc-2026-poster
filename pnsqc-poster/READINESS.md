@@ -207,8 +207,10 @@ that appears on them.
 
 ## 5. Submission mechanics
 
-- [ ] **[BLOCK]** Submit at pnsqc.org/conference/2026/poster/ — title, abstract, bio,
-      optional sketch. Deadline Sept 22 or when spots fill.
+- [x] ~~**[BLOCK]** Submit at pnsqc.org/conference/2026/poster/.~~ **DONE 2026-09-22 07:28,
+      submission ID 139 — and ACCEPTED 2026-09-23**, a day ahead of the stated notification
+      date. The remaining dates are the ones that bite now: **first draft poster to the
+      assigned reviewer Sept 28**, feedback Sept 30, conference Oct 12–14.
 - [ ] **[NICE]** Handout is built and fits two Letter pages; it is due with the first draft
       poster Sept 28.
 - [ ] Confirm the 50%-off registration perk still applies.
