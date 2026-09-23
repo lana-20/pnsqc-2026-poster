@@ -136,7 +136,9 @@ that appears on them.
       1:4 scale on screen the title, section headings, stat tiles and the conclusion rule
       all hold; the tables and the diff dissolve, which is the intended three-layer read
       (2m / 1m / arm's length). Confirm that on paper.
-- [ ] **[NICE] A QR to the reproduction repo.** `python3 measure.py 50 mine` takes about
+- [~] **[NICE] A QR to the reproduction repo. ASSET DONE 2026-09-23**, in the public repo at
+      `promo/qr-repro.svg`; only placing it on the board remains, which is a layout change.
+      Original note: `python3 measure.py 50 mine` takes about
       17 seconds measured end to end, and does not touch the reader's install — that is a genuinely
       walk-up-and-try invitation, and the URL is currently text only.
 
