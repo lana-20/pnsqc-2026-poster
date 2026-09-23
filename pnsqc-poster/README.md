@@ -9,6 +9,9 @@ it is a packaging change filed upstream as
 [#356](https://github.com/VibiumDev/vibium/issues/356) — **closed as completed 2026-08-25
 and merged as [PR #432](https://github.com/VibiumDev/vibium/pull/432)**.
 
+**Accepted 2026-09-23** as submission 139 — the milestone that bites now is the **first draft
+poster to the assigned reviewer by Sept 28**.
+
 Start at **`READINESS.md`** — it is the live checklist and says what is blocking.
 
 **Served over GitHub Pages.** The built artifacts render as pages rather than as source:
