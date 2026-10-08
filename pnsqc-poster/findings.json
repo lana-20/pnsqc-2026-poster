@@ -38,7 +38,7 @@
     "accounting": [
       "semantics held fixed -- an arm that changes what the journey does is not a faster arm",
       "one-time setup reported apart from the journey total",
-      "readiness polling equalised across arms and recorded apart",
+      "readiness polling equalized across arms and recorded apart",
       "absolute milliseconds lead; every ratio is stamped with its dispatch level",
       "a noise floor measured from a control the change cannot have touched"
     ],

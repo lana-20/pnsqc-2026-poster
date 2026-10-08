@@ -120,7 +120,7 @@ Filed upstream as issue #356.</p>
 <h2><span class="rn">I.</span>Introduction</h2>
 <div class="two">
   <p><span class="lab">Motivation.</span> Agent-driven test automation inverts the usual cost model. A human runs one command and waits; an agent runs a hundred, and the fixed cost of each one dominates. That makes per-invocation overhead a first-class performance property of a CLI — and it is the property nobody profiles, because on a single interactive command it is invisible. The question here is narrow and practical: for one widely used browser-automation CLI, where does the time actually go, and which of the obvious fixes survives contact with a real journey?</p>
-  <p><span class="lab">Problem Definition.</span> The trap is that almost any change makes a benchmark faster if you let the benchmark change too. Skip an actionability check and clicks get quicker; hold a browser open and startup leaves the total. Neither is a faster tool. So every arm here holds <b>semantics fixed</b>, reports one-time setup <b>apart</b> from the journey, <b>equalises</b> readiness polling, and is compared against a <b>noise floor measured from a control the change cannot have touched</b>. Under those rules, most of the candidates stopped looking like wins.</p>
+  <p><span class="lab">Problem Definition.</span> The trap is that almost any change makes a benchmark faster if you let the benchmark change too. Skip an actionability check and clicks get quicker; hold a browser open and startup leaves the total. Neither is a faster tool. So every arm here holds <b>semantics fixed</b>, reports one-time setup <b>apart</b> from the journey, <b>equalizes</b> readiness polling, and is compared against a <b>noise floor measured from a control the change cannot have touched</b>. Under those rules, most of the candidates stopped looking like wins.</p>
 </div>
 
 <h2><span class="rn">II.</span>Approach <span class="ct">· A. Review — the five candidates</span></h2>
@@ -214,7 +214,7 @@ Filed upstream as issue #356.</p>
   <div class="hon"><b>Accounting rules, applied to every arm</b>
     <ul><li>semantics held fixed -- an arm that changes what the journey does is not a faster arm</li>
 <li>one-time setup reported apart from the journey total</li>
-<li>readiness polling equalised across arms and recorded apart</li>
+<li>readiness polling equalized across arms and recorded apart</li>
 <li>absolute milliseconds lead; every ratio is stamped with its dispatch level</li>
 <li>a noise floor measured from a control the change cannot have touched</li></ul>
     <p><code class="ev">cli-v2/docs/TECHNIQUES.md:8-18</code> — AUTs

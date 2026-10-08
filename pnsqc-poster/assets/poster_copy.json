@@ -30,7 +30,7 @@
   ],
   "introduction": {
     "motivation": "Agent-driven test automation inverts the usual cost model. A human runs one command and waits; an agent runs a hundred, and the fixed cost of each one dominates. That makes per-invocation overhead a first-class performance property of a CLI — and it is the property nobody profiles, because on a single interactive command it is invisible. The question here is narrow and practical: for one widely used browser-automation CLI, where does the time actually go, and which of the obvious fixes survives contact with a real journey?",
-    "problem": "The trap is that almost any change makes a benchmark faster if you let the benchmark change too. Skip an actionability check and clicks get quicker; hold a browser open and startup leaves the total. Neither is a faster tool. So every arm here holds <b>semantics fixed</b>, reports one-time setup <b>apart</b> from the journey, <b>equalises</b> readiness polling, and is compared against a <b>noise floor measured from a control the change cannot have touched</b>. Under those rules, most of the candidates stopped looking like wins."
+    "problem": "The trap is that almost any change makes a benchmark faster if you let the benchmark change too. Skip an actionability check and clicks get quicker; hold a browser open and startup leaves the total. Neither is a faster tool. So every arm here holds <b>semantics fixed</b>, reports one-time setup <b>apart</b> from the journey, <b>equalizes</b> readiness polling, and is compared against a <b>noise floor measured from a control the change cannot have touched</b>. Under those rules, most of the candidates stopped looking like wins."
   },
   "approach": {
     "review": {
