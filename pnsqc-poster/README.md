@@ -35,6 +35,7 @@ pnsqc-poster/
   assets/
     poster_copy.json      prose blocks + headline figures for the board and handout
     poster-board.html     BUILT — A0 portrait, 1:1, print-ready
+    poster-board-24x36.html  BUILT — the same board for a 24x36in foam board
     handout.html          BUILT — 2 US Letter pages, print-ready
     brand/                the official template's own banner and logo
   scripts/
@@ -54,6 +55,7 @@ pnsqc-poster/
 
 ```sh
 python3 pnsqc-poster/scripts/build_board.py          # --landscape for the other trim
+python3 pnsqc-poster/scripts/build_board.py --size 24x36   # the board actually printed
 python3 pnsqc-poster/scripts/build_handout.py
 python3 pnsqc-poster/scripts/verify_findings.py
 python3 pnsqc-poster/scripts/check_fit.py            # needs the vibium CLI

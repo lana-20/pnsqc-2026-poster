@@ -46,6 +46,8 @@ MAX_FILL = 0.985  # leave >=1.5% of the page as slack against print reflow
 TARGETS = [
     (ASSETS / "poster-board.html", 3178, 4494, 1, "fixed", True,
      "A0 841x1189mm at 96dpi, @page margin 0"),
+    (ASSETS / "poster-board-24x36.html", 2304, 3456, 1, "fixed", True,
+     "24x36in at 96dpi, @page margin 0"),
     (ASSETS / "handout.html", 720, 970, 2, "flow", False,
      "Letter 8.5x11in less @page margin 0.45in 0.5in, at 96dpi"),
 ]

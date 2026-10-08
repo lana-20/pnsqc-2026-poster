@@ -200,6 +200,7 @@ _pats = [str(_sum), f"{_sum:,}"]
 _hits = [f"{f.name}:{n}" for f in (POSTER / "assets" / "poster_copy.json",
                                    POSTER / "PNSQC-PROPOSAL.md",
                                    POSTER / "assets" / "poster-board.html",
+                                   POSTER / "assets" / "poster-board-24x36.html",
                                    POSTER / "assets" / "handout.html")
          if f.exists()
          for n, line in enumerate(f.read_text().splitlines(), 1)

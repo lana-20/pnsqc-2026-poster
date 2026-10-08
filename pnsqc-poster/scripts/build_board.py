@@ -2,7 +2,7 @@
 """
 Build the print-ready poster board: assets/poster-board.html
 
-    python3 pnsqc-poster/scripts/build_board.py [--landscape]
+    python3 pnsqc-poster/scripts/build_board.py [--landscape] [--size 24x36]
 
 A0 at 1:1 — 841 x 1189 mm portrait (33.10 x 46.80 in), the trim size read out of
 the official PNSQC-2026-Poster-Template-Portrait.pptx (sldSz 30267275 x 42794238
@@ -16,6 +16,18 @@ print engine needs to run nothing before paginating. Open in Chrome, Print,
 "Save as PDF", paper A0, margins None, background graphics ON. `vibium pdf`
 cannot check this -- it ignores @page and always emits Letter; use
 scripts/check_fit.py to measure the layout instead.
+
+`--size 24x36` builds the same board for a 24 x 36 in (609.6 x 914.4 mm) foam
+board, into assets/poster-board-24x36.html. The design is still written in A0
+millimetres; it is laid out on a canvas DESIGN_W_24x36 wide and as tall as
+24x36's aspect makes it, then every length is scaled to the trim -- one layout,
+not a second one to keep in step. Text stays live and vector; only the two brand
+images are raster.
+
+The 24x36 build uses static faces Chrome embeds as TrueType (Helvetica Neue,
+Menlo). The system UI fonts are variable, and Chrome writes those into the PDF
+as Type 3, which print-shop preflight flags. Helvetica Neue sets wider, so the
+A0 board keeps the UI fonts it was fitted with -- swapping them spills it 72px.
 """
 
 import argparse
@@ -31,6 +43,31 @@ POSTER = Path(__file__).resolve().parent.parent
 ROOT = POSTER.parent
 ASSETS = POSTER / "assets"
 OUT = ASSETS / "poster-board.html"
+
+# trim in mm, design width in A0 mm, output file, fonts. A0 is the official
+# template's trim, submitted and reviewed, and is left as built. 24x36 is a US
+# foam board printed at FedEx, so it gets faces Chrome embeds as TrueType, and a
+# design width under 841: the board is laid out a little narrower than A0, then
+# scaled up to the trim, which spends 24x36's extra height on larger type.
+SCREEN_FONTS = ('ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+                'ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace')
+PRINT_FONTS = ('"Helvetica Neue",Helvetica,Arial,sans-serif', 'Menlo,Consolas,monospace')
+SIZES = {
+    "a0": ((841, 1189), 841, OUT, SCREEN_FONTS),
+    "24x36": ((609.6, 914.4), DESIGN_W_24x36 := 810, ASSETS / "poster-board-24x36.html", PRINT_FONTS),
+}
+
+
+def scale_mm(doc, k):
+    """Multiply every `Nmm` length by k, leaving data: URIs alone -- base64 can
+    contain `3mm` by chance, and rewriting it would corrupt the image."""
+    if k == 1:
+        return doc
+    num = re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)mm\b")
+    parts = re.split(r'("data:[^"]*")', doc)
+    return "".join(p if p.startswith('"data:') else
+                   num.sub(lambda m: f"{float(m.group(1)) * k:.3f}".rstrip("0").rstrip(".") + "mm", p)
+                   for p in parts)
 
 
 def brand(name):
@@ -105,8 +142,16 @@ def ticks(s):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--landscape", action="store_true")
+    ap.add_argument("--size", choices=sorted(SIZES), default="a0")
     args = ap.parse_args()
-    W, H = (1189, 841) if args.landscape else (841, 1189)
+    (tw, th), dw, out, (sans, mono) = SIZES[args.size]
+    if args.landscape:
+        if args.size != "a0":
+            raise SystemExit("build_board: --landscape is only built for A0")
+        tw, th, dw = th, tw, th
+    k = tw / dw
+    W, H = (int(x) if x == int(x) else x  # the canvas, in design mm
+            for x in (round(tw / k, 3), round(th / k, 3)))
 
     f, copy = load()
     m, head = copy["meta"], copy["headline"]
@@ -172,8 +217,8 @@ html, body {{ margin: 0; padding: 0; }}
   --ground:#FCFCFA; --panel:#FFFFFF; --sunk:#F4F3EE;
   --ink:#1A1C1B; --ink2:#3C413B; --ink3:#6A706A;
   --rule:#DCDCD4; --win:#2f7d8f; --loss:#d03b3b; --warn:#c2591c;
-  --sans: ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  --mono: ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --sans: {sans};
+  --mono: {mono};
 }}
 body {{
   width:{W}mm; height:{H}mm; background:var(--ground); color:var(--ink);
@@ -400,8 +445,9 @@ footer {{ display:flex; align-items:center; justify-content:space-between; gap:1
 
 </div></div></body></html>
 """
-    OUT.write_text(html_out)
-    print(f"wrote {OUT.relative_to(ROOT)} — {W}x{H}mm, "
+    html_out = scale_mm(html_out, k)
+    out.write_text(html_out)
+    print(f"wrote {out.relative_to(ROOT)} — {tw}x{th}mm, "
           f"{len(f['verdicts'])} techniques, {len(f['honesty'])} honesty rules, "
           f"{len(html_out) / 1024:.0f}KB")
 

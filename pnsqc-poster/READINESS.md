@@ -128,6 +128,14 @@ that appears on them.
 - [x] ~~**[NICE]** A chart for the headline finding.~~ **DONE — two.** Figure 1 is the
       signed verdict chart (both profiles, T4 hollow, T2 negative); Figure 2 is the
       per-call tax by position, with the full-tax reference line across all three groups.
+- [x] **The printed board is 24 × 36in, on foam board, from FedEx** — decided 2026-10-08.
+      PNSQC provides easels for boards, and a 24 × 36 fits in a car to Portland; A0 has no
+      FedEx standard size. `build_board.py --size 24x36` lays the same design out 810mm
+      wide and scales it to 609.6 × 914.4mm, so the type is 0.75× A0's (smallest 9.8pt)
+      and the taller aspect absorbs the reflow. That build uses Helvetica Neue and Menlo,
+      which Chrome embeds as TrueType; the system UI fonts came out as Type 3. A0 keeps its
+      fonts — Helvetica Neue sets wider and spills it 72px. The PNSQC banner is the
+      template's own 3169px JPEG, the largest PNSQC publishes: 132ppi across 24in.
 - [ ] **[BLOCK] Print test by hand in Chrome.** The one step no script can do: `vibium pdf`
       ignores `@page` and always emits Letter. `check_fit.py` measures the layout, which is
       not the same as seeing it come off a plotter.
