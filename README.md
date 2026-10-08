@@ -1,7 +1,7 @@
 # PNSQC 2026 — *Skip the Wrapper: Making a Browser-Automation CLI Faster*
 
 **Live → [lana-20.github.io/pnsqc-2026-poster](https://lana-20.github.io/pnsqc-2026-poster/)** · [Poster board (A0)](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/poster-board.html)
-· [Handout (2 Letter)](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/handout.html)
+· [Handout (2 Letter)](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/handout.html) · [Booth loop (laptop)](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/booth-loop.html)
 
 **Accepted** for the [Pacific NW Software Quality Conference](https://pnsqc.org/conference/2026/poster/),
 Portland, October 12–14 2026 (technical conference 12–13, workshops the 14th). Submission 139. Everything needed to rebuild the board, the handout and the
@@ -47,6 +47,7 @@ every client that made one. Four attach-and-leave cycles take one journey from 8
 | [`pnsqc-poster/LEARNING-OBJECTIVES.md`](pnsqc-poster/LEARNING-OBJECTIVES.md) | what an attendee leaves able to do |
 | [**Poster board**](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/poster-board.html) — A0 portrait, 1:1, print-ready | rendered; source at [`pnsqc-poster/assets/poster-board.html`](pnsqc-poster/assets/poster-board.html) |
 | [**Handout**](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/handout.html) — 2 US Letter pages | rendered; source at [`pnsqc-poster/assets/handout.html`](pnsqc-poster/assets/handout.html) |
+| [**Booth loop**](https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/booth-loop.html) — animated, for the laptop beside the board | 96 s, loops forever, runs offline; F full screen · ← → scenes · Space pause; source at [`pnsqc-poster/assets/booth-loop.html`](pnsqc-poster/assets/booth-loop.html) |
 | [`pnsqc-poster/findings.json`](pnsqc-poster/findings.json) | the evidence base every figure is drawn from |
 | [`pnsqc-poster/READINESS.md`](pnsqc-poster/READINESS.md) | the live checklist, including what is still open |
 | [`cli-v2/docs/TECHNIQUES.md`](cli-v2/docs/TECHNIQUES.md) | the verdict page the poster cites |
