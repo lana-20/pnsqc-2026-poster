@@ -13,8 +13,8 @@ html, body { margin: 0; padding: 0; }
   --ground:#FFFFFF; --sunk:#F4F3EE;
   --ink:#1A1C1B; --ink2:#3C413B; --ink3:#6A706A; --rule:#DCDCD4;
   --win:#2f7d8f; --loss:#d03b3b; --warn:#c2591c;
-  --sans: ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  --mono: ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --sans: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono: Menlo,Consolas,monospace;
 }
 body { background:var(--ground); color:var(--ink); font-family:var(--sans);
         font-size:7.4pt; line-height:1.32;
@@ -93,6 +93,8 @@ ol li b { color:var(--navy); }
 footer { border-top:0.6pt solid var(--rule); margin-top:5pt; padding-top:3.5pt;
           font-family:var(--mono); font-size:6.6pt; color:var(--ink3); line-height:1.48; }
 footer b { color:var(--navy); }
+footer { display:flex; align-items:center; justify-content:space-between; gap:10pt; }
+footer .qr { width:54pt; height:54pt; flex:0 0 auto; }
 .pb { break-before:page; }
 </style></head>
 <body>
@@ -240,10 +242,13 @@ Filed upstream as issue #356.</p>
 <p class="small" style="margin-top:3pt">Filed upstream, at a maintainer's public invitation, as an enhancement in the register the project's own CONTRIBUTING.md asks for — symptom first, patch offered in one line at the end, and an explicit statement of who it does <b>not</b> help: MCP users get no benefit, because that is one long-lived process, and nobody notices 108ms on a single interactive command. It is scripted and agent-driven CLI use where it adds up.</p>
 
 <footer>
+  <div>
   Full write-up: <b>daisyladybug.com/blog/making-vibium-cli-faster/</b><br>
   Public reproduction — <code>python3 measure.py 50 mine</code>, under a minute, does not
   touch your install: <b>github.com/lana-20/vibium-cli-startup-repro</b><br>
   Lana Begunova · Daisy Lady Bug · Seattle, WA · PNSQC 2026 · October 12–14, 2026 · Portland, Oregon
+  </div>
+  <img class="qr" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5ODQiIGhlaWdodD0iOTg0IiBjbGFzcz0ic2Vnbm8iPjxnIHRyYW5zZm9ybT0ic2NhbGUoMjQpIj48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMCAwaDQxdjQxaC00MXoiLz48cGF0aCBjbGFzcz0icXJsaW5lIiBzdHJva2U9IiMwZTFhMmIiIGQ9Ik00IDQuNWg3bTEgMGg0bTEgMGgxbTIgMGg2bTEgMGgxbTIgMGg3bS0zMyAxaDFtNSAwaDFtMSAwaDFtMSAwaDFtMiAwaDFtMiAwaDFtMSAwaDFtNCAwaDJtMSAwaDFtNSAwaDFtLTMzIDFoMW0xIDBoM20xIDBoMW0zIDBoM20zIDBoMm0xIDBoMW0yIDBoMW0xIDBoMW0xIDBoMW0xIDBoM20xIDBoMW0tMzMgMWgxbTEgMGgzbTEgMGgxbTEgMGgzbTEgMGgxbTEgMGgxbTEgMGgxbTkgMGgxbTEgMGgzbTEgMGgxbS0zMyAxaDFtMSAwaDNtMSAwaDFtMiAwaDFtMSAwaDJtMSAwaDFtNSAwaDFtMyAwaDFtMSAwaDFtMSAwaDNtMSAwaDFtLTMzIDFoMW01IDBoMW0yIDBoMW03IDBoM20xIDBoMm0xIDBoMW0xIDBoMW01IDBoMW0tMzMgMWg3bTEgMGgxbTEgMGgxbTEgMGgxbTEgMGgxbTEgMGgxbTEgMGgxbTEgMGgxbTEgMGgxbTEgMGgxbTEgMGg3bS0yNSAxaDJtMSAwaDFtMiAwaDFtMiAwaDFtMiAwaDFtMiAwaDJtLTI1IDFoMW0xIDBoMm0xIDBoM20xIDBoNG0xIDBoMW0xIDBoNG0xIDBoMm0xIDBoMW0xIDBoMW0yIDBoMW0xIDBoMm0tMzMgMWgxbTEgMGgybTEgMGgxbTEgMGgxbTQgMGgxbTMgMGgxbTEgMGgzbTIgMGgxbTIgMGgybTEgMGgybTEgMGgxbS0zMyAxaDJtMSAwaDRtMyAwaDFtMSAwaDFtMSAwaDFtMiAwaDFtMiAwaDFtMSAwaDJtMiAwaDRtMiAwaDFtLTMzIDFoMm02IDBoM20yIDBoM20yIDBoM201IDBoMm0xIDBoMW0tMzAgMWgybTEgMGg0bTEgMGgzbTQgMGgxbTIgMGgybTIgMGgybTEgMGgxbTIgMGgybTEgMGgybS0zMSAxaDFtMSAwaDFtMyAwaDZtMiAwaDNtMSAwaDNtMSAwaDJtMSAwaDFtMiAwaDJtLTMyIDFoMm0xIDBoNG0xIDBoMW0zIDBoMW0yIDBoMm0yIDBoM200IDBoNG0tMzAgMWgybTIgMGgxbTQgMGgxbTEgMGgybTMgMGgxbTIgMGgzbTMgMGgybTEgMGgzbS0zMSAxaDFtMSAwaDJtMSAwaDJtMyAwaDFtMiAwaDRtMiAwaDVtMSAwaDJtMSAwaDNtLTMwIDFoMm0xIDBoMm0yIDBoMW0xIDBoMm0zIDBoMW0xIDBoMW0yIDBoMW0xIDBoNW0xIDBoMm0xIDBoMm0tMjkgMWgxbTEgMGgxbTEgMGgxbTQgMGgxbTEgMGgzbTIgMGgxbTMgMGgybTEgMGgybTEgMGgybS0zMSAxaDRtMyAwaDJtMSAwaDFtMiAwaDNtMiAwaDFtMyAwaDJtMSAwaDFtMSAwaDFtMiAwaDJtLTMzIDFoNG0yIDBoMW0zIDBoNm0yIDBoMW0yIDBoMW0yIDBoMW00IDBoMm0tMzEgMWgxbTIgMGgxbTEgMGgxbTMgMGgxbTMgMGgxbTEgMGgxbTEgMGg1bTEgMGgxbTIgMGgybTIgMGgxbTEgMGgxbS0zMCAxaDFtMiAwaDJtMiAwaDFtMSAwaDFtMSAwaDFtMSAwaDNtMSAwaDJtMSAwaDFtMSAwaDNtMiAwaDNtLTMyIDFoMW0zIDBoMW0xIDBoNW00IDBoMW0xIDBoMW00IDBoMW0yIDBoMW0yIDBoMW0yIDBoMW0tMzMgMWgxbTEgMGg1bTMgMGgxbTQgMGgxbTEgMGgybTMgMGgxbTEgMGg1bS0yMSAxaDJtMiAwaDFtMiAwaDFtMSAwaDRtMyAwaDFtMyAwaDJtMSAwaDFtLTMyIDFoN20xIDBoMW00IDBoMm0xIDBoMW0yIDBoMm0yIDBoMm0xIDBoMW0xIDBoMW0tMjkgMWgxbTUgMGgxbTEgMGgxbTYgMGgxbTQgMGg1bTMgMGg0bS0zMiAxaDFtMSAwaDNtMSAwaDFtMyAwaDJtNSAwaDFtMSAwaDFtMSAwaDhtMSAwaDFtLTMxIDFoMW0xIDBoM20xIDBoMW0xIDBoMW0yIDBoMW0yIDBoMW0zIDBoMW0xIDBoMm0xIDBoMW0zIDBoMW0xIDBoMm0xIDBoMW0tMzMgMWgxbTEgMGgzbTEgMGgxbTEgMGgxbTEgMGgzbTEgMGgxbTIgMGgybTMgMGgxbTMgMGgybTIgMGgxbS0zMSAxaDFtNSAwaDFtMiAwaDFtMiAwaDZtMiAwaDFtMSAwaDFtMSAwaDFtMSAwaDNtMyAwaDFtLTMzIDFoN20xIDBoMW0yIDBoNW0xIDBoMW0xIDBoMW0xIDBoMW0xIDBoMW00IDBoMW0xIDBoMSIvPjwvZz48L3N2Zz4K" alt="QR code: github.com/lana-20/vibium-cli-startup-repro">
 </footer>
 
 </body></html>

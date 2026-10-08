@@ -19,9 +19,8 @@ than a QR-shaped texture an image model drew.
 
 **`qr-repro`** points to <https://github.com/lana-20/vibium-cli-startup-repro> — the
 reproduction repo, which runs in about two minutes and does not touch the reader's install.
-Version 4, error correction M. This is the QR `READINESS.md` asked for; **the asset exists,
-placing it on the board is still open**, because that is a layout change and the board has
-113px of slack.
+Version 4, error correction M. This is the QR `READINESS.md` asked for; since 2026-10-08 it is
+in the footer of the board and the handout (as `pnsqc-poster/assets/qr-repro.svg`).
 
 ## Re-rendering the card
 

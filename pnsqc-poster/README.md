@@ -38,6 +38,7 @@ pnsqc-poster/
     poster-board-24x36.html  BUILT — the same board for a 24x36in foam board
     handout.html          BUILT — 2 US Letter pages, print-ready
     brand/                the official template's own banner and logo
+    qr-repro.svg          QR to the reproduction repo, on the board and the handout
   scripts/
     build_board.py        -> assets/poster-board.html
     build_handout.py      -> assets/handout.html

@@ -77,6 +77,16 @@ def brand(name):
     return "data:image/jpeg;base64," + base64.b64encode(p.read_bytes()).decode()
 
 
+def qr_repro():
+    """The reproduction repo's QR (promo/qr-repro.svg in the public repo), as
+    vector so it prints sharp at any trim. Inlined as a data: URI, which also
+    keeps scale_mm away from its path data."""
+    p = ASSETS / "qr-repro.svg"
+    if not p.exists():
+        raise SystemExit(f"missing {p.relative_to(ROOT)}")
+    return "data:image/svg+xml;base64," + base64.b64encode(p.read_bytes()).decode()
+
+
 def load():
     f_p, copy_p = POSTER / "findings.json", ASSETS / "poster_copy.json"
     for p in (f_p, copy_p):
@@ -321,6 +331,11 @@ footer {{ display:flex; align-items:center; justify-content:space-between; gap:1
 .links {{ font-family:var(--mono); font-size:6mm; color:var(--ink2); line-height:1.5; }}
 .links b {{ color:var(--navy); }}
 .logo {{ width:30mm; height:30mm; flex:0 0 auto; }}
+.tail {{ display:flex; align-items:center; gap:7mm; }}
+.qrcap {{ font-family:var(--mono); font-size:5.4mm; line-height:1.35; color:var(--ink3);
+          text-align:right; }}
+.qrcap b {{ color:var(--navy); }}
+.qr {{ width:36mm; height:36mm; flex:0 0 auto; }}
 </style></head>
 <body><div class="board">
 <img class="brandbar" src="{brand('pnsqc-banner.jpg')}" alt="">
@@ -440,7 +455,11 @@ footer {{ display:flex; align-items:center; justify-content:space-between; gap:1
     Public reproduction — <code>python3 measure.py 50 mine</code>: <b>{esc(m["repro"])}</b><br>
     {esc(m["conference"])}
   </div>
-  <img class="logo" src="{brand('pnsqc-logo.jpg')}" alt="PNSQC">
+  <div class="tail">
+    <div class="qrcap"><b>Run it yourself</b><br>scan for the<br>reproduction repo</div>
+    <img class="qr" src="{qr_repro()}" alt="QR code: {esc(m["repro"])}">
+    <img class="logo" src="{brand('pnsqc-logo.jpg')}" alt="PNSQC">
+  </div>
 </footer>
 
 </div></div></body></html>

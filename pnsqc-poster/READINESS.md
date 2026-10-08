@@ -144,8 +144,12 @@ that appears on them.
       1:4 scale on screen the title, section headings, stat tiles and the conclusion rule
       all hold; the tables and the diff dissolve, which is the intended three-layer read
       (2m / 1m / arm's length). Confirm that on paper.
-- [~] **[NICE] A QR to the reproduction repo. ASSET DONE 2026-09-23**, in the public repo at
-      `promo/qr-repro.svg`; only placing it on the board remains, which is a layout change.
+- [x] **[NICE] A QR to the reproduction repo. ON THE BOARD AND THE HANDOUT 2026-10-08.**
+      `assets/qr-repro.svg` (a copy of the public repo's `promo/qr-repro.svg`), inlined as
+      vector in both footers. Decoded out of the printed PDFs, not assumed: the 24x36 board's
+      at 72dpi and the handout's at 150dpi both read
+      `https://github.com/lana-20/vibium-cli-startup-repro`. The handout moved to the board's
+      print fonts in the same change, which also took it off Type 3.
       Original note: `python3 measure.py 50 mine` takes about
       17 seconds measured end to end, and does not touch the reader's install — that is a genuinely
       walk-up-and-try invitation, and the URL is currently text only.

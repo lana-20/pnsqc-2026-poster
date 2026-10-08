@@ -27,7 +27,7 @@ ROOT = POSTER.parent
 ASSETS = POSTER / "assets"
 OUT = ASSETS / "handout.html"
 
-from build_board import load  # single source for the build-time guard
+from build_board import load, qr_repro, PRINT_FONTS  # single source for the build-time guard
 
 
 def esc(s):
@@ -142,8 +142,8 @@ html, body {{ margin: 0; padding: 0; }}
   --ground:#FFFFFF; --sunk:#F4F3EE;
   --ink:#1A1C1B; --ink2:#3C413B; --ink3:#6A706A; --rule:#DCDCD4;
   --win:#2f7d8f; --loss:#d03b3b; --warn:#c2591c;
-  --sans: ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  --mono: ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --sans: {PRINT_FONTS[0]};
+  --mono: {PRINT_FONTS[1]};
 }}
 body {{ background:var(--ground); color:var(--ink); font-family:var(--sans);
         font-size:7.4pt; line-height:1.32;
@@ -222,6 +222,8 @@ ol li b {{ color:var(--navy); }}
 footer {{ border-top:0.6pt solid var(--rule); margin-top:5pt; padding-top:3.5pt;
           font-family:var(--mono); font-size:6.6pt; color:var(--ink3); line-height:1.48; }}
 footer b {{ color:var(--navy); }}
+footer {{ display:flex; align-items:center; justify-content:space-between; gap:10pt; }}
+footer .qr {{ width:54pt; height:54pt; flex:0 0 auto; }}
 .pb {{ break-before:page; }}
 </style></head>
 <body>
@@ -340,10 +342,13 @@ Filed upstream as issue #{head["upstream_issue"]}.</p>
 <p class="small" style="margin-top:3pt">{concl["close"]}</p>
 
 <footer>
+  <div>
   Full write-up: <b>{esc(m["article"])}</b><br>
   Public reproduction — <code>python3 measure.py 50 mine</code>, under a minute, does not
   touch your install: <b>{esc(m["repro"])}</b><br>
   {esc(m["authors"])} · {esc(m["affiliation"])} · {esc(m["conference"])}
+  </div>
+  <img class="qr" src="{qr_repro()}" alt="QR code: {esc(m["repro"])}">
 </footer>
 
 </body></html>
