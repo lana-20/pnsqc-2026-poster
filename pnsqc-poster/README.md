@@ -9,14 +9,14 @@ it is a packaging change filed upstream as
 [#356](https://github.com/VibiumDev/vibium/issues/356) — **closed as completed 2026-08-25
 and merged as [PR #432](https://github.com/VibiumDev/vibium/pull/432)**.
 
-**Accepted 2026-09-23** as submission 139 — the milestone that bites now is the **first draft
-poster to the assigned reviewer by Sept 28**.
+**Accepted 2026-09-23** as submission 139.
 
 Start at **`READINESS.md`** — it is the live checklist and says what is blocking.
 
 **Served over GitHub Pages.** The built artifacts render as pages rather than as source:
 
 * **Poster board**, A0 portrait 1:1 — <https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/poster-board.html>
+* **Poster board**, 24 × 36in — <https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/poster-board-24x36.html>
 * **Handout**, 2 US Letter — <https://lana-20.github.io/pnsqc-2026-poster/pnsqc-poster/assets/handout.html>
 * Overview and verdict ledger — <https://lana-20.github.io/pnsqc-2026-poster/>
 
@@ -35,7 +35,7 @@ pnsqc-poster/
   assets/
     poster_copy.json      prose blocks + headline figures for the board and handout
     poster-board.html     BUILT — A0 portrait, 1:1, print-ready
-    poster-board-24x36.html  BUILT — the same board for a 24x36in foam board
+    poster-board-24x36.html  BUILT — the same board at 24 × 36in
     handout.html          BUILT — 2 US Letter pages, print-ready
     brand/                the official template's own banner and logo
     qr-repro.svg          QR to the reproduction repo, on the board and the handout

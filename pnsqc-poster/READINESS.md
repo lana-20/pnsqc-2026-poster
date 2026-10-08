@@ -128,9 +128,7 @@ that appears on them.
 - [x] ~~**[NICE]** A chart for the headline finding.~~ **DONE — two.** Figure 1 is the
       signed verdict chart (both profiles, T4 hollow, T2 negative); Figure 2 is the
       per-call tax by position, with the full-tax reference line across all three groups.
-- [x] **The printed board is 24 × 36in, on foam board, from FedEx** — decided 2026-10-08.
-      PNSQC provides easels for boards, and a 24 × 36 fits in a car to Portland; A0 has no
-      FedEx standard size. `build_board.py --size 24x36` lays the same design out 810mm
+- [x] **A 24 × 36in build beside A0** — added 2026-10-08. `build_board.py --size 24x36` lays the same design out 810mm
       wide and scales it to 609.6 × 914.4mm, so the type is 0.75× A0's (smallest 9.8pt)
       and the taller aspect absorbs the reflow. That build uses Helvetica Neue and Menlo,
       which Chrome embeds as TrueType; the system UI fonts came out as Type 3. A0 keeps its
@@ -225,8 +223,7 @@ that appears on them.
       submission ID 139 — and ACCEPTED 2026-09-23**, a day ahead of the stated notification
       date. The remaining dates are the ones that bite now: **first draft poster to the
       assigned reviewer Sept 28**, feedback Sept 30, conference Oct 12–14.
-- [ ] **[NICE]** Handout is built and fits two Letter pages; it is due with the first draft
-      poster Sept 28.
+- [x] **[NICE]** Handout is built and fits two Letter pages.
 - [ ] Confirm the 50%-off registration perk still applies.
 
 ---

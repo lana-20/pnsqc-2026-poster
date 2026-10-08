@@ -17,8 +17,8 @@ print engine needs to run nothing before paginating. Open in Chrome, Print,
 cannot check this -- it ignores @page and always emits Letter; use
 scripts/check_fit.py to measure the layout instead.
 
-`--size 24x36` builds the same board for a 24 x 36 in (609.6 x 914.4 mm) foam
-board, into assets/poster-board-24x36.html. The design is still written in A0
+`--size 24x36` builds the same board at 24 x 36 in (609.6 x 914.4 mm),
+into assets/poster-board-24x36.html. The design is still written in A0
 millimetres; it is laid out on a canvas DESIGN_W_24x36 wide and as tall as
 24x36's aspect makes it, then every length is scaled to the trim -- one layout,
 not a second one to keep in step. Text stays live and vector; only the two brand
@@ -26,7 +26,7 @@ images are raster.
 
 The 24x36 build uses static faces Chrome embeds as TrueType (Helvetica Neue,
 Menlo). The system UI fonts are variable, and Chrome writes those into the PDF
-as Type 3, which print-shop preflight flags. Helvetica Neue sets wider, so the
+as Type 3, which PDF preflight checks commonly flag. Helvetica Neue sets wider, so the
 A0 board keeps the UI fonts it was fitted with -- swapping them spills it 72px.
 """
 
@@ -45,8 +45,8 @@ ASSETS = POSTER / "assets"
 OUT = ASSETS / "poster-board.html"
 
 # trim in mm, design width in A0 mm, output file, fonts. A0 is the official
-# template's trim, submitted and reviewed, and is left as built. 24x36 is a US
-# foam board printed at FedEx, so it gets faces Chrome embeds as TrueType, and a
+# template's trim, submitted and reviewed, and is left as built. 24x36 is the US
+# poster size; it gets faces Chrome embeds as TrueType, and a
 # design width under 841: the board is laid out a little narrower than A0, then
 # scaled up to the trim, which spends 24x36's extra height on larger type.
 SCREEN_FONTS = ('ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
